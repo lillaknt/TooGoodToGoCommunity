@@ -81,11 +81,11 @@ public class UserLogic : IUserLogic
             throw new ValidationException("Password cannot be null");
         }
         
-        if (string.IsNullOrEmpty(user.FirstName))
+      /*  if (string.IsNullOrEmpty(user.FirstName))
         {
             throw new ValidationException("First name cannot be null");
         }
-        
+        */
         
         userDao.CreateAsync(user);
         
