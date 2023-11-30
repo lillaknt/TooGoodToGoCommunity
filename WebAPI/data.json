@@ -6,17 +6,13 @@
       "FirstName": "Lilla",
       "Password": "test123",
       "PostCode": 8000
-    }
-  ],
-  "Posts": [
+    },
     {
-      "Id": 1,
-      "UserId": 1,
-      "FirstName": null,
-      "PostCode": null,
-      "Title": "Gingerbread Cookies",
-      "Body": "Yum yum",
-      "Price": null
+      "Id": 2,
+      "Email": "lilla@lilla.dk",
+      "FirstName": "Lilla",
+      "Password": "123Pass",
+      "PostCode": 8000
     }
   ]
 }
