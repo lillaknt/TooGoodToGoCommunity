@@ -17,6 +17,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />
+      <ProjectReference Include="..\EFCDataAccess\EFCDataAccess.csproj" />
+      <ProjectReference Include="..\FileData\FileData.csproj" />
     </ItemGroup>
 
 </Project>
