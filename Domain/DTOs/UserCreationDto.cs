@@ -2,12 +2,12 @@ namespace Domain.DTOs;
 
 public class UserCreationDto
 {
-    public string FirstName { get;}
-    public string Password { get; set; }
+    public string Email { get; }
+    public string Password { get; }
 
-    public UserCreationDto(string firstName, string password)
+    public UserCreationDto(string email, string password)
     {
-        FirstName = firstName;
+        Email = email;
         Password = password;
     }
 }
