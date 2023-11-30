@@ -1,0 +1,22 @@
+{
+  "Users": [
+    {
+      "Id": 1,
+      "Email": "asd@gmail.com",
+      "FirstName": "Lilla",
+      "Password": "test123",
+      "PostCode": 8000
+    }
+  ],
+  "Posts": [
+    {
+      "Id": 1,
+      "UserId": 1,
+      "FirstName": null,
+      "PostCode": null,
+      "Title": "Gingerbread Cookies",
+      "Body": "Yum yum",
+      "Price": null
+    }
+  ]
+}
