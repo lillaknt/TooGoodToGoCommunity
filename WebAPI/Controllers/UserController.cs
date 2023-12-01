@@ -1,5 +1,7 @@
+using System.Net;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,10 +26,22 @@ public class UserController : ControllerBase
             User user = await userLogic.CreateAsync(dto);
             return Created($"/users/{user.Id}", user);
         }
-        catch (Exception e)
+        catch (UnavailableEmailException ex)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return Conflict(new { Message = ex.Message });
+        }
+        catch (InvalidNameLengthException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+        catch (InvalidEmailException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
     
@@ -40,10 +54,10 @@ public class UserController : ControllerBase
             IEnumerable<User> users = await userLogic.GetAsync(parameters);
             return Ok(users);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            // Handle exceptions
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
 }

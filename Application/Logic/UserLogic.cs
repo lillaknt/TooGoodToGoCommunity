@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.Exceptions;
 using Domain.Models;
 
 namespace Application.Logic;
@@ -19,7 +20,7 @@ public class UserLogic : IUserLogic
     {
         User? existing = await userDao.GetByEmailAsync(dto.Email);
         if (existing != null)
-            throw new Exception("Email already used");
+            throw new UnavailableEmailException("Email already used");
 
         ValidateData(dto);
         User toCreate = new User
@@ -37,14 +38,10 @@ public class UserLogic : IUserLogic
 
     private static void ValidateData(UserCreationDto userToCreate) //NEEDS TO BE FIXED
     {
-        string email = userToCreate.Email;
         string firstName = userToCreate.FirstName;
 
         if (firstName.Length < 3) //put in validation for @
-            throw new Exception("First name must be at least 3 characters!");
-
-        if (email.Length > 100)
-            throw new Exception("Email must be less than 100 characters!");
+            throw new InvalidNameLengthException("First name must be at least 3 characters!");
     }
     
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
@@ -58,12 +55,12 @@ public class UserLogic : IUserLogic
         
         if (existing == null)
         {
-            throw new Exception("User not found");
+            throw new UserNotFoundException("User not found");
         }
 
         if (!existing.Password.Equals(password))
         {
-            throw new Exception("Password mismatch");
+            throw new InvalidCredentialsException("Password mismatch");
         }
 
         return await Task.FromResult(existing);
@@ -73,7 +70,7 @@ public class UserLogic : IUserLogic
     {
         if (string.IsNullOrEmpty(user.Email))
         {
-            throw new ValidationException("Email cannot be null");
+            throw new InvalidEmailException("Email cannot be null");
         }
 
         if (string.IsNullOrEmpty(user.Password))
@@ -83,7 +80,7 @@ public class UserLogic : IUserLogic
         
         if (string.IsNullOrEmpty(user.FirstName))
         {
-            throw new ValidationException("First name cannot be null");
+            throw new InvalidNameLengthException("First name cannot be null");
         }
         
         
