@@ -18,6 +18,9 @@ builder.Services.AddScoped<FileContext>();
 builder.Services.AddScoped<IUserDao, UserFileDao>(); //UserEfcDao
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 
+builder.Services.AddScoped<IPostDao, PostFileDao>(); //PostEfcDao
+builder.Services.AddScoped<IPostLogic, PostLogic>();
+
 
 var app = builder.Build();
 
