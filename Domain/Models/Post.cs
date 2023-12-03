@@ -18,9 +18,9 @@ namespace Domain.Models
         // Reference to the user who created the post
         //public User Creator { get; set; }
         
-        public Post(int id, string title, string? description, decimal? price)
+        public Post( string title, string? description, decimal? price)
         {
-            Id = id;
+            
             Title = title;
             Description = description;
             Price = price;
@@ -34,7 +34,9 @@ namespace Domain.Models
             Price = price;
             Creator = creator;
         }*/
-
+        
+        
+        // Parameterless constructor for serialization purposes
         public Post() { }
     }
 }

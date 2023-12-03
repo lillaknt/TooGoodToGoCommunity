@@ -57,12 +57,12 @@ namespace WebAPI.Controllers;
             }
         }*/
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetAllPosts()
+        [HttpGet("GetAllPosts")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync()
         {
             try
             {
-                IEnumerable<Post> posts = await postLogic.GetAllPosts();
+                IEnumerable<Post> posts = await postLogic.GetAllPostsAsync();
                 return Ok(posts);
             }
             catch (Exception e)
@@ -72,16 +72,32 @@ namespace WebAPI.Controllers;
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Post>>> GetAsync([FromQuery] SearchPostParametersDto searchParameters)
+        {
+            try
+            {
+                IEnumerable<Post> posts = await postLogic.GetAsync(searchParameters);
+                return Ok(posts);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }
+        
+        
         [HttpGet("{postId}")]
         public async Task<ActionResult<Post>> GetPostById(int postId)
         {
             try
             {
-                Post? post = await postLogic.GetPostById(postId);
+                var post = await postLogic.GetPostByIdAsync(postId);
 
                 if (post == null)
                 {
-                    return NotFound(); // Return 404 Not Found if the post is not found
+                    return NotFound(); // Return 404 Not Found if the post with the specified ID is not found
                 }
 
                 return Ok(post);
@@ -92,6 +108,25 @@ namespace WebAPI.Controllers;
                 return StatusCode(500, e.Message);
             }
         }
+        
+        [HttpPatch]
+        public async Task<ActionResult> UpdateAsync([FromBody] PostUpdateDto postUpdateDto)
+        {
+            try
+            {
+               await postLogic.UpdateAsync(postUpdateDto);
+                // Return the updated post
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }  
+
+
+        
 
         // Implement other methods as needed
     }
