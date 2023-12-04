@@ -6,17 +6,27 @@
       "FirstName": "Lilla",
       "Password": "test123",
       "PostCode": 8000
+    },
+    {
+      "Id": 2,
+      "Email": "lillaknt@gmail.com",
+      "FirstName": "Lilla",
+      "Password": "Test123",
+      "PostCode": 8000
     }
   ],
   "Posts": [
     {
+      "Id": 2,
+      "Title": "Milkshake",
+      "Description": "Melts fast",
+      "Price": 10
+    },
+    {
       "Id": 1,
-      "UserId": 1,
-      "FirstName": null,
-      "PostCode": null,
       "Title": "Gingerbread Cookies",
-      "Body": "Yum yum",
-      "Price": null
+      "Description": "A bite of Christmas",
+      "Price": 110
     }
   ]
 }
