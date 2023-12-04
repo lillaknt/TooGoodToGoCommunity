@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.Exceptions;
 using Domain.Models;
 
 namespace Application.Logic;
@@ -20,7 +19,7 @@ public class UserLogic : IUserLogic
     {
         User? existing = await userDao.GetByEmailAsync(dto.Email);
         if (existing != null)
-            throw new UnavailableEmailException("Email already used");
+            throw new Exception("Email already used");
 
         ValidateData(dto);
         User toCreate = new User
@@ -36,12 +35,19 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    private static void ValidateData(UserCreationDto userToCreate) //NEEDS TO BE FIXED
+    private static void ValidateData(UserCreationDto userToCreate) 
     {
+        string email = userToCreate.Email;
         string firstName = userToCreate.FirstName;
 
-        if (firstName.Length < 3) //put in validation for @
-            throw new InvalidNameLengthException("First name must be at least 3 characters!");
+        if (firstName.Length < 2) 
+            throw new Exception("First name must be at least 2 characters!");
+
+        if (email.Length > 100)
+            throw new Exception("Email must be less than 100 characters!");
+        
+        if (!email.Contains('@')) //checks if it is an email address
+            throw new Exception("Invalid email format. Please include '@' in the email address!");
     }
     
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
@@ -55,12 +61,12 @@ public class UserLogic : IUserLogic
         
         if (existing == null)
         {
-            throw new UserNotFoundException("User not found");
+            throw new Exception("User not found");
         }
 
         if (!existing.Password.Equals(password))
         {
-            throw new InvalidCredentialsException("Password mismatch");
+            throw new Exception("Password mismatch");
         }
 
         return await Task.FromResult(existing);
@@ -70,7 +76,7 @@ public class UserLogic : IUserLogic
     {
         if (string.IsNullOrEmpty(user.Email))
         {
-            throw new InvalidEmailException("Email cannot be null");
+            throw new ValidationException("Email cannot be null");
         }
 
         if (string.IsNullOrEmpty(user.Password))
@@ -80,7 +86,7 @@ public class UserLogic : IUserLogic
         
         if (string.IsNullOrEmpty(user.FirstName))
         {
-            throw new InvalidNameLengthException("First name cannot be null");
+            throw new ValidationException("First name cannot be null");
         }
         
         

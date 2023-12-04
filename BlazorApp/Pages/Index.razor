@@ -1,0 +1,18 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Index</PageTitle>
+
+<h1>Test Website: Too Good To Go - Community</h1>
+
+Welcome to Too Good To Go - Community
+
+<button @onclick="NavigateToCreateUser" class="btn btn-primary">Create User</button>
+
+@code {
+    private void NavigateToCreateUser()
+    {
+    // Use NavigationManager to navigate to the CreateUser page
+        NavigationManager.NavigateTo("/CreateUser");
+    }
+}

@@ -9,10 +9,24 @@
     },
     {
       "Id": 2,
-      "Email": "lilla@lilla.dk",
+      "Email": "lillaknt@gmail.com",
       "FirstName": "Lilla",
-      "Password": "123Pass",
+      "Password": "Test123",
       "PostCode": 8000
+    }
+  ],
+  "Posts": [
+    {
+      "Id": 2,
+      "Title": "Milkshake",
+      "Description": "Melts fast",
+      "Price": 10
+    },
+    {
+      "Id": 1,
+      "Title": "Gingerbread Cookies",
+      "Description": "A bite of Christmas",
+      "Price": 110
     }
   ]
 }

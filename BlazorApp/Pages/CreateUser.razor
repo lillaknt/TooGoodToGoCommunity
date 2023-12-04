@@ -1,0 +1,83 @@
+@page "/CreateUser"
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject IUserService UserService
+@inject NavigationManager navMgr
+
+<div class="card">
+    <h3>Create User</h3>
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="text" class="form-control" @bind="email" @bind:event="oninput" />
+    </div>
+
+    <div class="form-group">
+        <label>First Name:</label>
+        <input type="text" class="form-control" @bind="firstName" @bind:event="oninput" />
+    </div>
+
+    <div class="form-group">
+        <label>Password:</label>
+        <input type="password" class="form-control" @bind="password" @bind:event="oninput" />
+    </div>
+
+    <div class="form-group">
+        <label>Post Code:</label>
+        <input type="number" class="form-control" @bind="postCode" @bind:event="oninput" />
+    </div>
+
+    <div class="button-row">
+        <button @onclick="Create" disabled="@(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(password))"
+                class="btn btn-success">Create</button>
+         @if (!string.IsNullOrEmpty(resultMsg))
+                        {
+                            <label style="color: @color">@resultMsg</label>
+                        }
+    </div>
+</div>
+
+@code {
+    private string email = "";
+    private string firstName = "";
+    private string password = "";
+    private int postCode = 0;
+    private string resultMsg = "";
+    private string color = "";
+
+    private async Task Create()
+    {
+        resultMsg = "";
+
+        try
+        {
+            await UserService.CreateAsync(new UserCreationDto(email, firstName, password, postCode));
+            ResetForm();
+            resultMsg = "User successfully created";
+            color = "green";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+    }
+
+    private void ResetForm()
+    {
+        email = "";
+        firstName = "";
+        password = "";
+        postCode = 0;
+    }
+
+    /* This could be nice to use, so we avoid redundant code.
+    private void RenderResultMessage()
+    {
+        if (!string.IsNullOrEmpty(resultMsg))
+        {
+            <small style="color: @color">@resultMsg</small>
+        }
+    }
+    */
+}
