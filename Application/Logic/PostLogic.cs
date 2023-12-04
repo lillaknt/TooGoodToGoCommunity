@@ -123,6 +123,20 @@ namespace Application.Logic
             return new Post(post.Title, post.Description, post.Price);
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            Post? existingPost = await postDao.GetPostByIdAsync(id);
+
+            if (existingPost == null)
+            {
+                throw new Exception($"Post with ID {id} not found.");
+            }
+            
+            //other logic if needed
+
+            await postDao.DeleteAsync(id);
+        }
+
 
         // Implement other methods as needed
     }

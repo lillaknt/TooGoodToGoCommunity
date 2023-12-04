@@ -92,10 +92,19 @@ public class PostFileDao : IPostDao
         return Task.CompletedTask;
     }
 
-  
-    
-    
-    
+    public Task DeleteAsync(int id)
+    {
+        Post? existingPost = context.Posts.FirstOrDefault(p => p.Id == id);
+        if (existingPost == null)
+        {
+            throw new KeyNotFoundException($"Post with ID {id} not found.");
+        }
+
+        context.Posts.Remove(existingPost);
+        context.SaveChanges();
+        return Task.CompletedTask;
+    }
+
 
     // Other methods...
 

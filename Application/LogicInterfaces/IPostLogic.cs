@@ -16,6 +16,8 @@ namespace Application.LogicInterfaces;
         Task UpdateAsync(PostUpdateDto updateDto);
         
         Task<Post?> GetPostByIdAsync(int postId);
+        
+        Task DeleteAsync(int id);
 
 
      
