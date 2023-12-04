@@ -35,16 +35,19 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    private static void ValidateData(UserCreationDto userToCreate) //NEEDS TO BE FIXED
+    private static void ValidateData(UserCreationDto userToCreate) 
     {
         string email = userToCreate.Email;
         string firstName = userToCreate.FirstName;
 
-        if (firstName.Length < 3) //put in validation for @
-            throw new Exception("First name must be at least 3 characters!");
+        if (firstName.Length < 2) 
+            throw new Exception("First name must be at least 2 characters!");
 
         if (email.Length > 100)
             throw new Exception("Email must be less than 100 characters!");
+        
+        if (!email.Contains('@')) //checks if it is an email address
+            throw new Exception("Invalid email format. Please include '@' in the email address!");
     }
     
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
@@ -81,11 +84,11 @@ public class UserLogic : IUserLogic
             throw new ValidationException("Password cannot be null");
         }
         
-      /*  if (string.IsNullOrEmpty(user.FirstName))
+        if (string.IsNullOrEmpty(user.FirstName))
         {
             throw new ValidationException("First name cannot be null");
         }
-        */
+        
         
         userDao.CreateAsync(user);
         

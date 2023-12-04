@@ -1,38 +1,38 @@
 @page "/CreateUser"
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
-@inject IUserService UserService;
+@inject IUserService UserService
 @inject NavigationManager navMgr
 
 <div class="card">
     <h3>Create User</h3>
-    <div class="form-group field">
-        <label>Email: </label>
-        <input type="text" @bind="email" @bind:event="oninput"/>
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="text" class="form-control" @bind="email" @bind:event="oninput" />
     </div>
-    <div class="form-group field">
-        <label>First Name : </label>
-        <input type="text" @bind="firstName" @bind:event="oninput"/>
-        @if (!string.IsNullOrEmpty(resultMsg))
+
+    <div class="form-group">
+        <label>First Name:</label>
+        <input type="text" class="form-control" @bind="firstName" @bind:event="oninput" />
+    </div>
+
+    <div class="form-group">
+        <label>Password:</label>
+        <input type="password" class="form-control" @bind="password" @bind:event="oninput" />
+    </div>
+
+    <div class="form-group">
+        <label>Post Code:</label>
+        <input type="number" class="form-control" @bind="postCode" @bind:event="oninput" />
+    </div>
+
+    <div class="button-row">
+        <button @onclick="Create" disabled="@(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(password))"
+                class="btn btn-success">Create</button>
+         @if (!string.IsNullOrEmpty(resultMsg))
                         {
                             <label style="color: @color">@resultMsg</label>
                         }
-    </div>
-    <div class="form-group field">
-        <label>Password:</label>
-                <input type="text" @bind="password" @bind:event="oninput"/>
-                @if (!string.IsNullOrEmpty(resultMsg))
-                {
-                    <label style="color: @color">@resultMsg</label>
-                }
-    </div>
-    <div class="form-group field">
-        <label>Post Code : </label>
-        <input type="number" @bind="postCode" @bind:event="oninput"/>
-    </div>
-    
-    <div class="button-row">
-        <button @onclick="Create" disabled="@(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(password))" class="acceptbtn">Create</button>
     </div>
 </div>
 
@@ -43,7 +43,7 @@
     private int postCode = 0;
     private string resultMsg = "";
     private string color = "";
-    
+
     private async Task Create()
     {
         resultMsg = "";
@@ -51,10 +51,7 @@
         try
         {
             await UserService.CreateAsync(new UserCreationDto(email, firstName, password, postCode));
-            email = "";
-            firstName = "";
-            password = "";
-            postCode = 0;
+            ResetForm();
             resultMsg = "User successfully created";
             color = "green";
         }
@@ -65,4 +62,22 @@
             color = "red";
         }
     }
+
+    private void ResetForm()
+    {
+        email = "";
+        firstName = "";
+        password = "";
+        postCode = 0;
+    }
+
+    /* This could be nice to use, so we avoid redundant code.
+    private void RenderResultMessage()
+    {
+        if (!string.IsNullOrEmpty(resultMsg))
+        {
+            <small style="color: @color">@resultMsg</small>
+        }
+    }
+    */
 }

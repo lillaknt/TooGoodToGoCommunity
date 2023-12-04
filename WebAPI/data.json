@@ -6,17 +6,55 @@
       "FirstName": "Lilla",
       "Password": "test123",
       "PostCode": 8000
-    }
-  ],
-  "Posts": [
+    },
     {
-      "Id": 1,
-      "UserId": 1,
-      "FirstName": null,
-      "PostCode": null,
-      "Title": "Gingerbread Cookies",
-      "Body": "Yum yum",
-      "Price": null
+      "Id": 2,
+      "Email": "malte@via.dk",
+      "FirstName": "Malte",
+      "Password": "malt123",
+      "PostCode": 8000
+    },
+    {
+      "Id": 3,
+      "Email": "johanne4444@mail.dk",
+      "FirstName": "Johanne",
+      "Password": "hej1234",
+      "PostCode": 8000
+    },
+    {
+      "Id": 4,
+      "Email": "test@test.com",
+      "FirstName": "Johanne ",
+      "Password": "7777777777",
+      "PostCode": 1000
+    },
+    {
+      "Id": 5,
+      "Email": "test@testtest.dk",
+      "FirstName": "johanne",
+      "Password": "122345678",
+      "PostCode": 7000
+    },
+    {
+      "Id": 6,
+      "Email": "test",
+      "FirstName": "hddd",
+      "Password": "jbhjfjkcnksn",
+      "PostCode": 7888
+    },
+    {
+      "Id": 7,
+      "Email": "opopopopo",
+      "FirstName": "fhjdhj",
+      "Password": "464646",
+      "PostCode": 7888
+    },
+    {
+      "Id": 8,
+      "Email": "dddd@",
+      "FirstName": "wwww",
+      "Password": "2222",
+      "PostCode": 0
     }
   ]
 }
