@@ -28,6 +28,7 @@ public class UserLogic : IUserLogic
             Password = dto.Password,
             FirstName = dto.FirstName,
             PostCode = dto.PostCode
+            
         };
         
         User created = await userDao.CreateAsync(toCreate);

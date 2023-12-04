@@ -1,0 +1,61 @@
+@page "/CreatePost"
+
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject IPostService postService
+@inject NavigationManager navMgr
+
+<div class="card">
+        <h3>Create Post</h3>
+        <div class="form-group field">
+            <label>Title:</label>
+            <input type="text" @bind="postTitle"/>
+        </div>
+    <div class="form-group field">
+        <label>Description:</label>
+        <input type="text" @bind="postDescription"/>
+    </div>
+     <div class="form-group field">
+                <label>Price:</label>
+                <input type="text" @bind="postPrice"/>
+            </div>
+       
+    
+    <div class="button-row">
+            @if (!string.IsNullOrEmpty(msg))
+            {
+                <label style="color: red">@msg</label>
+            }
+            <button @onclick="Create" class="acceptbtn">Create</button>
+        </div>
+</div>
+
+@code {
+    // implement after auth
+    // private int? selectedUserId;
+    private string postTitle = "";
+    private string postDescription = "";
+    private decimal postPrice;
+    
+
+    private string msg = "";
+
+   
+    private async Task Create()
+    {
+        msg = "";
+       
+     try
+        {
+            PostCreationDto dto = new( postTitle, postDescription, postPrice);
+            await postService.CreateAsync(dto); 
+            navMgr.NavigateTo("/ViewPosts");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+}
