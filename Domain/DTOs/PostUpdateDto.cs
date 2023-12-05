@@ -8,8 +8,11 @@ public class PostUpdateDto
     public string? Description { get; set; }
     public decimal? Price { get; set; }
     
-    public PostUpdateDto(int id)
+    public PostUpdateDto(int id, string? title = null, string? description = null, decimal? price = null)
     {
         Id = id;
+        Title = title;
+        Description = description;
+        Price = price;
     }
 }

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
@@ -67,5 +68,48 @@ public class PostHttpClient : IPostService
         })!;
         return post;
 
+    }
+
+    public async Task<PostUpdateDto> GetByIdAsync(int id)
+    {
+        HttpResponseMessage response = await client.GetAsync($"/post/{id}");
+        string content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        PostUpdateDto dto = JsonSerializer.Deserialize<PostUpdateDto>(content,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }
+        )!;
+        return dto;
+    }
+    
+    
+
+    public async Task UpdateAsync(PostUpdateDto dto)
+    {
+        string dtoAsJson = JsonSerializer.Serialize(dto);
+        StringContent body = new StringContent(dtoAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PatchAsync("/post", body);
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        HttpResponseMessage response = await client.DeleteAsync($"post/{id}");
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
     }
 }

@@ -16,9 +16,11 @@
          <p id="DescriptionPost">@post.Description</p>
          <p id="PricePost">@post.Price</p>  
                                       
-         <div class="button">
-             
+         <div class="button-container">
           
+<button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
+
+             <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
          </div>                            
      }
 </div>
@@ -28,6 +30,7 @@
 
     private Post post;
     private IEnumerable<Post> posts;
+    private string msg = "";
     
     
     
@@ -47,7 +50,6 @@
     }
     
     
- 
 
     private async Task GetAsync(GetPostIdDto id)
     {
@@ -63,19 +65,31 @@
             throw;
         }
     }
-
-    private async void Delete(GetPostIdDto id)
+    
+    private void EditButton(int id)
     {
+        Navigation.NavigateTo($"EditPost/{id}");
+    }
+    
+    
+    private async Task RemoveTodo(int id)
+    {
+        msg = "";
         try
         {
-
-            
+            await postService.DeleteAsync(id);
+        
+            var list = new List<Post>(posts!);
+            list.RemoveAll(post => post.Id == id);
+            posts = list.AsEnumerable();
+         
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            msg = e.Message;
         }
+        Navigation.NavigateTo("/ViewPosts");
     }
-
+    
 }
