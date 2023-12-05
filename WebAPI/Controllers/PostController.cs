@@ -58,8 +58,11 @@ namespace WebAPI.Controllers;
         }*/
 
         [HttpGet("GetAllPosts")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync()
+        public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync([FromQuery]int? id)
         {
+            GetPostIdDto dto = new GetPostIdDto();
+            dto.SetId(id);
+            
             try
             {
                 IEnumerable<Post> posts = await postLogic.GetAllPostsAsync();

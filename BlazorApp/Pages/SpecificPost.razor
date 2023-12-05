@@ -27,14 +27,18 @@
     [Parameter] public int postId { get; set; }
 
     private Post post;
+    private IEnumerable<Post> posts;
+    
+    
     
     protected override async Task OnInitializedAsync()
     {
         try
         {
 
-            post = await postService.GetId(postId);
-           
+            GetPostIdDto idDto = new GetPostIdDto();
+            idDto.SetId(postId);
+            await GetAsync(idDto);
         }
         catch (Exception e)
         {
@@ -50,7 +54,8 @@
         try
         {
             posts = await postService.GetId(id);
-          
+            post = posts.First();
+
         }
         catch (Exception e)
         {

@@ -2,12 +2,17 @@ namespace Domain.DTOs;
 
 public class GetPostIdDto
 {
-    public int Id { get; }
+   private int? Id = null;
 
-    public GetPostIdDto(int id)
-    {
-        Id = id;
-    }
+   public void SetId(int? id)
+   {
+       Id = id;
+   }
+
+   public int? ReturnId()
+   {
+       return Id;
+   }
+
+
 }
-
-
