@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Too Good To Go - Community</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -15,15 +17,20 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-                            <NavLink class="nav-link" href="Login">
-                                <span class="oi oi-plus" aria-hidden="true"></span> Login
-                            </NavLink>
-                        </div>
-          <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="CreateUser">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Create User
-                    </NavLink>
-                </div>
+            <NavLink class="nav-link" href="Login">
+                <span class="oi oi-plus" aria-hidden="true"></span> Login
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="ViewUserProfile">
+                <span class="oi oi-plus" aria-hidden="true"></span> View User Profile
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="CreateUser">
+                <span class="oi oi-plus" aria-hidden="true"></span> Create User
+            </NavLink>
+        </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="CreatePost">
                 <span class="oi oi-plus" aria-hidden="true"></span> Create New Post
@@ -37,6 +44,7 @@
     </nav>
 </div>
 
+
 @code {
     private bool collapseNavMenu = true;
 
@@ -46,5 +54,5 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
-
+    
 }

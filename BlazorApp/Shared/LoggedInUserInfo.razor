@@ -1,0 +1,30 @@
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="user-info">
+    <AuthorizeView>
+        <Authorized>
+            <span class="navbar-text">
+                Welcome, @GetUserName()
+            </span>
+        </Authorized>
+        <NotAuthorized>
+            <span class="navbar-text">
+                            Log In
+                        </span>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+
+@code {
+    
+    // to validate if the user has logged in, and fetching the email to display on the nav menu
+    private string GetUserName()
+    {
+        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
+        var user = authState.User;
+
+    // Access user properties (e.g., name, email)
+        return user.Identity.IsAuthenticated ? user.Identity.Name : "Guest";
+    }
+}
