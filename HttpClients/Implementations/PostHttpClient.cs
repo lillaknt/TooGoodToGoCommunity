@@ -39,4 +39,33 @@ public class PostHttpClient : IPostService
         })!;
         return posts;
     }
+
+
+
+    public async Task<IEnumerable<Post>> GetId(GetPostIdDto id)
+    {
+        string uri = "";
+        if (id.ReturnId() == null)
+        {
+            uri = "/post";
+        }
+        else
+        {
+            uri = $"post?id={id.ReturnId()}";
+        }
+
+        HttpResponseMessage response = await client.GetAsync(uri);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+        
+        IEnumerable<Post> post = JsonSerializer.Deserialize<IEnumerable<Post>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return post;
+
+    }
 }

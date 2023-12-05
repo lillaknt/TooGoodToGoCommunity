@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain.DTOs;
 using Domain.Models;
 
@@ -11,4 +12,9 @@ public interface IPostService
         string? Description, 
         decimal? Price
     );
+    Task<IEnumerable<Post>> GetId(GetPostIdDto id);
+    
+ 
+    
+    
 }

@@ -1,0 +1,15 @@
+.postCard{
+
+    .card{
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        margin-right: 15%;
+        margin-left: 15%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+}

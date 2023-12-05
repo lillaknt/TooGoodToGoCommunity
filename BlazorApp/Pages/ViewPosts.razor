@@ -2,41 +2,29 @@
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @inject IPostService postService
+@inject NavigationManager Navigation
 
-<h3>View Posts</h3>
 
-@if (posts == null)
-{
-}
-else if (!posts.Any())
-{
-    <p>No posts to display</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Post ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in posts)
-        {
-            <tr>
-                <td>@item.Id</td>
-                
-                <td>@item.Title</td>
-                <td>@item.Description</td>
-                <td>@item.Price</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+<div>
+    <h3>View Posts</h3> 
+    @if (posts != null)
+    {
+        <ul>
+              @foreach (var item in posts)
+              {
+                  <div class="postCard" @onclick="() => OpenSpecificPost(item.Id)">
+    
+                      <p id="TitlePost">@item.Title</p>
+                       <p id="PricePost">@item.Price</p>
+                      
+                  </div>
+              }
+
+        </ul>
+    }
+</div>
+
+
 @if (!string.IsNullOrEmpty(msg))
 {
     <label style="color: red">@msg</label>
@@ -60,8 +48,13 @@ else
         }
     }
 
+    private void OpenSpecificPost(int id)
+    {
+        Navigation.NavigateTo($"SpecificPost/{id}");
+    }
+
     private async Task LoadPosts()
     {
         posts = await postService.GetAsync(null, null, null);
-    }
+    }   
 }

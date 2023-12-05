@@ -1,0 +1,76 @@
+@page "/SpecificPost/{postId:int}"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@inject IPostService postService
+@inject IJSRuntime JsRuntime
+@inject NavigationManager Navigation
+
+
+<h3>SpecificPost</h3>
+<div class="postCard">
+    
+     @if (post != null)
+     {
+         <p id="TitlePost">@post.Title</p>
+         <p id="DescriptionPost">@post.Description</p>
+         <p id="PricePost">@post.Price</p>  
+                                      
+         <div class="button">
+             
+          
+         </div>                            
+     }
+</div>
+@code {
+     
+    [Parameter] public int postId { get; set; }
+
+    private Post post;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+            post = await postService.GetId(postId);
+           
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+    
+    
+ 
+
+    private async Task GetAsync(GetPostIdDto id)
+    {
+        try
+        {
+            posts = await postService.GetId(id);
+          
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async void Delete(GetPostIdDto id)
+    {
+        try
+        {
+
+            
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+}
