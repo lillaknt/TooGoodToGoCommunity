@@ -20,7 +20,7 @@
           
 <button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
 
-             <button class="buttons">Delete</button>
+             <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
          </div>                            
      }
 </div>
@@ -30,6 +30,7 @@
 
     private Post post;
     private IEnumerable<Post> posts;
+    private string msg = "";
     
     
     
@@ -70,5 +71,25 @@
         Navigation.NavigateTo($"EditPost/{id}");
     }
     
+    
+    private async Task RemoveTodo(int id)
+    {
+        msg = "";
+        try
+        {
+            await postService.DeleteAsync(id);
+        
+            var list = new List<Post>(posts!);
+            list.RemoveAll(post => post.Id == id);
+            posts = list.AsEnumerable();
+         
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+        Navigation.NavigateTo("/ViewPosts");
+    }
     
 }
