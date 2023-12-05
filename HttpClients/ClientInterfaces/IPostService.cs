@@ -13,8 +13,10 @@ public interface IPostService
         decimal? Price
     );
     Task<IEnumerable<Post>> GetId(GetPostIdDto id);
+
+    Task<PostUpdateDto> GetByIdAsync(int id);
     
- 
+    Task UpdateAsync(PostUpdateDto dto);
     
     
 }

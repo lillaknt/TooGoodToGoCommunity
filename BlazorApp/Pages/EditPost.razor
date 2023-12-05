@@ -1,0 +1,88 @@
+@page "/EditPost/{id:int}"
+@using Domain.DTOs
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IPostService postService
+@inject NavigationManager Navigation
+
+
+<h3>EditPost</h3>
+
+<div class="card">
+    @if (dto == null)
+    {
+        <label>Loading Post data..</label>
+    }
+    else
+    {
+
+        <div class="form-group field">
+            <label>Title:</label>
+            <input type="text" @bind="dto.Title"/>
+        </div>
+        <div class="form-group field">
+            <label>Description:</label>
+            <input type="text" @bind="dto.Description"/>
+        </div>
+        <div class="form-group field">
+            <label>Price:</label>
+            <input type="text" @bind="dto.Price"/>
+        </div>
+
+        <div class="button-row">
+            <button @onclick="UpdateAsync" class="acceptbtn">Update</button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(msg))
+    {
+        <label style="color: red">@msg</label>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private PostUpdateDto dto = null!;
+    private string msg = "";
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+           
+            PostUpdateDto updatedPost = await postService.GetByIdAsync(Id);
+            
+            dto = new(Id)
+            {
+                Title = updatedPost.Title,
+                Description = updatedPost.Description,
+                Price = updatedPost.Price
+                
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    private async Task UpdateAsync()
+    {
+        try
+        {
+            await postService.UpdateAsync(dto); //handover to the dto in IPostService
+            Navigation.NavigateTo("/ViewPosts");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+}

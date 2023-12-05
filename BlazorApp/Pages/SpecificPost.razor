@@ -16,9 +16,11 @@
          <p id="DescriptionPost">@post.Description</p>
          <p id="PricePost">@post.Price</p>  
                                       
-         <div class="button">
-             
+         <div class="button-container">
           
+<button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
+
+             <button class="buttons">Delete</button>
          </div>                            
      }
 </div>
@@ -47,7 +49,6 @@
     }
     
     
- 
 
     private async Task GetAsync(GetPostIdDto id)
     {
@@ -63,19 +64,11 @@
             throw;
         }
     }
-
-    private async void Delete(GetPostIdDto id)
+    
+    private void EditButton(int id)
     {
-        try
-        {
-
-            
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        Navigation.NavigateTo($"EditPost/{id}");
     }
-
+    
+    
 }
