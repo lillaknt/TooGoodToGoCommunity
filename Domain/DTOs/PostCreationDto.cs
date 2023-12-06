@@ -13,13 +13,14 @@ public class PostCreationDto
     [Range(0, double.MaxValue, ErrorMessage = "Price must be a non-negative value")]
     public decimal? Price { get; set; }
     
+    public byte[]? ImageData { get; set; }
 
-    public PostCreationDto(string title, string? description, decimal? price)
+    public PostCreationDto(string title, string? description, decimal? price, byte[]? imageData)
     {
         Title = title;
         Description = description;
         Price = price;
-      
+        ImageData = imageData;
     }
 
     public PostCreationDto() { }

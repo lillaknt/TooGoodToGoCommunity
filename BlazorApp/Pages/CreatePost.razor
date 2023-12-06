@@ -19,15 +19,19 @@
                 <label>Price:</label>
                 <input type="text" @bind="postPrice"/>
             </div>
-       
+       <div class="form-group field">
+           <label>Picture:</label>
+           <InputFile OnChange="HandleFileUpload" />
+       </div>
     
     <div class="button-row">
-            @if (!string.IsNullOrEmpty(msg))
-            {
-                <label style="color: red">@msg</label>
-            }
-            <button @onclick="Create" class="acceptbtn">Create</button>
-        </div>
+        @if (!string.IsNullOrEmpty(msg))
+        {
+            <label style="color: red">@msg</label>
+        }
+        <button @onclick="Create" class="acceptbtn">Create</button>
+    </div>
+     
 </div>
 
 @code {
@@ -36,19 +40,25 @@
     private string postTitle = "";
     private string postDescription = "";
     private decimal postPrice;
-    
-
+    private byte[]? imageData;
     private string msg = "";
 
-   
+
     private async Task Create()
     {
         msg = "";
-       
-     try
+
+        try
         {
-            PostCreationDto dto = new( postTitle, postDescription, postPrice);
-            await postService.CreateAsync(dto); 
+    // Check if the imageData contains file data
+            if (imageData == null || imageData.Length == 0)
+            {
+                msg = "Please select an image.";
+                return;
+            }
+
+            PostCreationDto dto = new(postTitle, postDescription, postPrice, imageData);
+            await postService.CreateAsync(dto);
             navMgr.NavigateTo("/ViewPosts");
         }
         catch (Exception e)
@@ -57,5 +67,18 @@
             msg = e.Message;
         }
     }
-    
+    private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles().FirstOrDefault();
+
+        if (file != null)
+        {
+            await using var stream = file.OpenReadStream();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            imageData = memoryStream.ToArray();
+        }
+    }
+    }
+
 }
