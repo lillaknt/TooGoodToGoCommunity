@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Models;
 
 namespace Domain.DTOs;
 
@@ -13,14 +14,15 @@ public class PostCreationDto
     public decimal? Price { get; set; }
 
     // Add a property for the user ID
-    public int UserId { get; set; }
+   // public int UserId { get; set; }
+    public User User { get; set; }
 
-    public PostCreationDto(string title, string? description, decimal? price, int userId)
+    public PostCreationDto(string title, string? description, decimal? price, User user)
     {
         Title = title;
         Description = description;
         Price = price;
-        UserId = userId;
+        User = user;
     }
 
     public PostCreationDto() { }

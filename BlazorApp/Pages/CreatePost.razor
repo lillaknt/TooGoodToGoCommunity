@@ -3,7 +3,9 @@
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
 @using System.Security.Claims
+@using Domain.Models
 @inject IPostService postService
+@inject IUserService userService
 @inject NavigationManager navMgr
 
 <div class="card">
@@ -37,6 +39,8 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
    private int userId;
+    private User loggedInUser;
+    
     //private string? postalCode;
     //private string? name;
     
@@ -58,6 +62,7 @@
         if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
         {
             userId = parsedUserId;
+            loggedInUser = await userService.
         }
         else
         {
@@ -72,6 +77,8 @@
     private string postTitle = "";
     private string postDescription = "";
     private decimal postPrice;
+   
+    
     
 
     private string msg = "";
@@ -83,7 +90,7 @@
        
      try
         {
-            PostCreationDto dto = new( postTitle, postDescription, postPrice, userId);
+            PostCreationDto dto = new( postTitle, postDescription, postPrice, loggedInUser);
             await postService.CreateAsync(dto); 
             navMgr.NavigateTo("/ViewPosts");
         }

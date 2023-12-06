@@ -33,7 +33,7 @@ namespace Application.Logic
                            Title = dto.Title,
                            Description = dto.Description,
                            Price = dto.Price,
-                           User =  new User { Id = dto.UserId } // Associate the creator with the post
+                           User =  new User { Id = dto.User.Id,Email = dto.User.Email,FirstName = dto.User.FirstName,PostCode = dto.User.PostCode} // Associate the creator with the post
                        };
 
                        // Save the post using the DAO
