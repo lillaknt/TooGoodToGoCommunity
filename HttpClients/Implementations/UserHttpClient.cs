@@ -51,4 +51,9 @@ public class UserHttpClient : IUserService
         })!;
         return users;
     }
+
+    public Task<User> GetByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 }
