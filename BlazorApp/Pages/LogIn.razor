@@ -3,6 +3,8 @@
 @inject IAuthService authService
 @inject NavigationManager navMgr
 
+<PageTitle>Login</PageTitle>
+
 <AuthorizeView>
     <NotAuthorized>
         <div class="card">
@@ -30,7 +32,8 @@
     </NotAuthorized>
     <Authorized>
         <div class="card">
-            <h3>Hello</h3>
+            <h3>Hello, @context.User.Identity.Name</h3>
+             
         </div>
     </Authorized>
 </AuthorizeView>

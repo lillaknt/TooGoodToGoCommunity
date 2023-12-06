@@ -11,7 +11,7 @@ public class JwtAuthService : IAuthService
 {
     private readonly HttpClient client = new ();
 
-    // this private variable for simple caching
+    // this static field holds token received from the WebAPI
     public static string? Jwt { get; private set; } = "";
 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;
