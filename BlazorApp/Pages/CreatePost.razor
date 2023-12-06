@@ -2,6 +2,7 @@
 
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IPostService postService
 @inject NavigationManager navMgr
 
@@ -31,8 +32,43 @@
 </div>
 
 @code {
-    // implement after auth
-    // private int? selectedUserId;
+    
+   //getting our logegd in user info
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+   private int userId;
+    //private string? postalCode;
+    //private string? name;
+    
+ private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        isLoggedIn = user.Identity != null;
+        
+        if (!isLoggedIn) return;
+    //postalCode = user.FindFirst(ClaimTypes.PostalCode)?.Value;
+    // name = user.Identity!.Name!;
+        
+        //retrieve user ID and convert it to id
+        var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+        else
+        {
+            userId = 0; // Set a default value or handle it in a way that makes sense for your application
+            msg = "Unable to retrieve user ID from authentication.";
+
+        }
+        
+    }
+    
+    
     private string postTitle = "";
     private string postDescription = "";
     private decimal postPrice;
@@ -47,7 +83,7 @@
        
      try
         {
-            PostCreationDto dto = new( postTitle, postDescription, postPrice);
+            PostCreationDto dto = new( postTitle, postDescription, postPrice, userId);
             await postService.CreateAsync(dto); 
             navMgr.NavigateTo("/ViewPosts");
         }

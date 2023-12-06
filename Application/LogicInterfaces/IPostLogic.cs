@@ -8,8 +8,7 @@ namespace Application.LogicInterfaces;
     {
         
         Task<Post> CreateAsync(PostCreationDto postToCreate);
-        // when authentication is in place
-        // Task<Post> CreateAsync(PostCreationDto postToCreate, User creator);
+        
         
         Task<IEnumerable<Post>> GetAllPostsAsync();
         Task<IEnumerable<Post>> GetAsync(SearchPostParametersDto searchParameters);

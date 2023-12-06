@@ -15,55 +15,30 @@ namespace Application.Logic
         }
         
         
-        public async Task<Post> CreateAsync(PostCreationDto dto)
-        {
-            // Validate the post creation DTO
-            if (dto == null)
-            {
-                throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
-            }
-            
 
-            // Create a new post without associating it with a user for now
-            var newPost = new Post
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                Price = dto.Price,
-                // Creator will be set later when authentication is implemented
-            };
+                    
+                    public async Task<Post> CreateAsync(PostCreationDto dto)
+                   {
+                       // Validate the post creation DTO
+                       if (dto == null)
+                       {
+                           throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
+                       }
 
-            // Save the post using the DAO
-            return await postDao.CreateAsync(newPost);
-        }
+                       // You can add more validation logic for the DTO properties if needed
 
-   
+                       // Create a new post
+                       var newPost = new Post
+                       {
+                           Title = dto.Title,
+                           Description = dto.Description,
+                           Price = dto.Price,
+                           User =  new User { Id = dto.UserId } // Associate the creator with the post
+                       };
 
-        /*
-         
-         When authentication is in place
-         public async Task<Post> CreateAsync(PostCreationDto dto, User creator)
-        {
-            // Validate the post creation DTO
-            if (dto == null)
-            {
-                throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
-            }
-
-            // You can add more validation logic for the DTO properties if needed
-
-            // Create a new post
-            var newPost = new Post
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                Price = dto.Price,
-                Creator = creator // Associate the creator with the post
-            };
-
-            // Save the post using the DAO
-            return await postDao.CreateAsync(newPost);
-        }*/
+                       // Save the post using the DAO
+                       return await postDao.CreateAsync(newPost);
+                   }
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
