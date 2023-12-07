@@ -20,23 +20,24 @@ namespace Domain.Models
         // Reference to the user who created the post
         public User User { get; set; }
         
-        public Post( string title, string? description, decimal? price, byte[]? imageData)
+        public Post( string title, string? description, decimal? price, byte[]? imageData, User userid)
         {
             
             Title = title;
             Description = description;
             Price = price;
             ImageData = imageData;
+            User = userid;
         }
 
-        public Post(int id, string? title, string? description, decimal? price, User user)
+        /*public Post(int id, string? title, string? description, decimal? price, User user)
         {
             Id = id;
             Title = title;
             Description = description;
             Price = price;
             User = user;
-        }
+        }*/
         
         
         // Parameterless constructor for serialization purposes

@@ -102,7 +102,7 @@ namespace Application.Logic
             
             byte[]? imageDataToUse = updateDto.ImageData ?? existingPost.ImageData;
 
-            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse)
+            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse, new User{ Id = existingPost.User.Id })
             {
                 Id = existingPost.Id,
             };
@@ -125,7 +125,7 @@ namespace Application.Logic
 
             }
 
-            return new Post(post.Title, post.Description, post.Price, post.ImageData);
+            return new Post(post.Title, post.Description, post.Price, post.ImageData, new User{ Id = post.User.Id });
         }
 
         public async Task DeleteAsync(int id)
