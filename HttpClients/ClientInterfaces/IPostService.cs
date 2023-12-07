@@ -14,7 +14,7 @@ public interface IPostService
     );
     Task<IEnumerable<Post>> GetId(GetPostIdDto id);
 
-    Task<PostUpdateDto> GetByIdAsync(int id);
+    Task<PostUpdateDto> GetByIdAsync(int id, int userid);
     
     Task UpdateAsync(PostUpdateDto dto);
     

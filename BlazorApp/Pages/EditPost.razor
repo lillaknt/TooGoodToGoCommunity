@@ -46,6 +46,7 @@
 @code {
     [Parameter]
     public int Id { get; set; }
+    public int UserId { get; set; }
 
     private PostUpdateDto dto = null!;
     private string msg = "";
@@ -57,13 +58,15 @@
         try
         {
            
-            PostUpdateDto updatedPost = await postService.GetByIdAsync(Id);
+            PostUpdateDto updatedPost = await postService.GetByIdAsync(Id, UserId);
             
-            dto = new(Id)
+            dto = new(Id,UserId)
+            
             {
                 Title = updatedPost.Title,
                 Description = updatedPost.Description,
                 Price = updatedPost.Price
+                    
                 
             };
         }
