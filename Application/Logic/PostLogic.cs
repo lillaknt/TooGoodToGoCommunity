@@ -28,8 +28,10 @@ namespace Application.Logic
             var newPost = new Post
             {
                 Title = dto.Title,
+                ImageData = dto.ImageData,
                 Description = dto.Description,
                 Price = dto.Price,
+                
                 // Creator will be set later when authentication is implemented
             };
 
@@ -96,8 +98,10 @@ namespace Application.Logic
             string titleToUse = updateDto.Title ?? existingPost.Title;
             string descriptionToUse = updateDto.Description ?? existingPost.Description;
             decimal priceToUse = updateDto.Price ?? existingPost.Price ?? 0;
+            
+            byte[]? imageDataToUse = updateDto.ImageData ?? existingPost.ImageData;
 
-            Post updated = new(titleToUse, descriptionToUse, priceToUse)
+            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse)
             {
                 Id = existingPost.Id,
             };
@@ -120,7 +124,7 @@ namespace Application.Logic
 
             }
 
-            return new Post(post.Title, post.Description, post.Price);
+            return new Post(post.Title, post.Description, post.Price, post.ImageData);
         }
 
         public async Task DeleteAsync(int id)
