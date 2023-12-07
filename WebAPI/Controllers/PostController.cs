@@ -116,8 +116,5 @@ namespace WebAPI.Controllers;
                 return StatusCode(500, e.Message);
             }
         }
-
         
-
-        // Implement other methods as needed
     }

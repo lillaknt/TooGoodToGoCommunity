@@ -13,39 +13,8 @@ namespace Application.Logic
         {
             this.postDao = postDao;
         }
-        
-        
 
-                    
-                    public async Task<Post> CreateAsync(PostCreationDto dto)
-                   {
-                       // Validate the post creation DTO
-                       if (dto == null)
-                       {
-                           throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
-                       }
-
-            var newPost = new Post
-            {
-                Title = dto.Title,
-                ImageData = dto.ImageData,
-                Description = dto.Description,
-                Price = dto.Price,
-                User =  new User { Id = dto.UserId } // Associate the creator with the post
-
-                // Creator will be set later when authentication is implemented
-            };
-
-            // Save the post using the DAO
-            return await postDao.CreateAsync(newPost);
-        }
-
-   
-
-        /*
-         
-         When authentication is in place
-         public async Task<Post> CreateAsync(PostCreationDto dto, User creator)
+        public async Task<Post> CreateAsync(PostCreationDto dto)
         {
             // Validate the post creation DTO
             if (dto == null)
@@ -53,20 +22,18 @@ namespace Application.Logic
                 throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
             }
 
-            // You can add more validation logic for the DTO properties if needed
-
-            // Create a new post
             var newPost = new Post
             {
                 Title = dto.Title,
+                ImageData = dto.ImageData,
                 Description = dto.Description,
                 Price = dto.Price,
-                Creator = creator // Associate the creator with the post
+                User =  new User { Id = dto.UserId } // Associate the user with the post
             };
 
             // Save the post using the DAO
             return await postDao.CreateAsync(newPost);
-        }*/
+        }
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
@@ -109,11 +76,6 @@ namespace Application.Logic
 
             // Save the updated post
             await postDao.UpdateAsync(updated);
-
-            // Retrieve the updated post (optional, depending on your requirements)
-           // existingPost = await postDao.GetPostByIdAsync(existingPost.Id);
-
-           // return existingPost;
         }
 
         public async Task<Post?> GetPostByIdAsync(int postId)
@@ -137,12 +99,10 @@ namespace Application.Logic
                 throw new Exception($"Post with ID {id} not found.");
             }
             
-            //other logic if needed
 
             await postDao.DeleteAsync(id);
         }
 
 
-        // Implement other methods as needed
     }
 }

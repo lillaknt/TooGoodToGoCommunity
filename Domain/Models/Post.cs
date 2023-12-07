@@ -29,15 +29,6 @@ namespace Domain.Models
             ImageData = imageData;
             User = userid;
         }
-
-        /*public Post(int id, string? title, string? description, decimal? price, User user)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-            Price = price;
-            User = user;
-        }*/
         
         
         // Parameterless constructor for serialization purposes
