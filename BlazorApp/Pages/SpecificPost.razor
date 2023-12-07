@@ -12,9 +12,10 @@
     
      @if (post != null)
      {
-         <p id="TitlePost">@post.Title</p>
-         <p id="DescriptionPost">@post.Description</p>
-         <p id="PricePost">@post.Price</p>  
+         <p id="TitlePost">Title:@post.Title</p>
+         <p id="DescriptionPost">Post Description: @post.Description</p>
+         <p id="PricePost">Price: @post.Price kr.</p>  
+         <p id="PricePost">User ID: @post.User.Id</p>  
                                       
          <div class="button-container">
           
