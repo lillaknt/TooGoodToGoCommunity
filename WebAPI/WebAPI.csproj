@@ -22,8 +22,5 @@
       <Content Remove="data.json" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services\" />
-    </ItemGroup>
 
 </Project>

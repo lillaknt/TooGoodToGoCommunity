@@ -26,7 +26,9 @@ public class PostHttpClient : IPostService
             dto.Title,
             dto.Description,
             dto.Price,
-            ImageData = base64ImageData
+            ImageData = base64ImageData,
+            dto.UserId
+            
         };
         
         HttpResponseMessage response = await client.PostAsJsonAsync("/post",dtoWithImageData);
@@ -81,7 +83,7 @@ public class PostHttpClient : IPostService
 
     }
 
-    public async Task<PostUpdateDto> GetByIdAsync(int id)
+    public async Task<PostUpdateDto> GetByIdAsync(int id, int userid)
     {
         HttpResponseMessage response = await client.GetAsync($"/post/{id}");
         string content = await response.Content.ReadAsStringAsync();

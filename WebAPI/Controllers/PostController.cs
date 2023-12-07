@@ -31,31 +31,6 @@ namespace WebAPI.Controllers;
             }
         }
         
-        // when authentication is in place
-
-        /*[HttpPost]
-        public async Task<ActionResult<Post>> CreateAsync(PostCreationDto dto)
-        {
-            try
-            {
-                // Get the currently logged-in user (you may need to implement authentication)
-                var creator = /* Implement logic to get the current user #1#;
-
-                if (creator == null)
-                {
-                    // If the user is not authenticated, return a 401 Unauthorized status
-                    return Unauthorized();
-                }
-
-                Post post = await postLogic.CreateAsync(dto, creator);
-                return Created($"/posts/{post.Id}", post);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
-        }*/
 
         [HttpGet("GetAllPosts")]
         public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync([FromQuery]int? id)

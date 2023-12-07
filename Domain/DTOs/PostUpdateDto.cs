@@ -10,12 +10,15 @@ public class PostUpdateDto
     
     public byte[]? ImageData { get; set; }
     
-    public PostUpdateDto(int id, string? title = null, string? description = null, decimal? price = null, byte[]? imageData = null)
+    public int? UserId { get; set; }
+    
+    public PostUpdateDto(int id, int? userId,  string? title = null, string? description = null, decimal? price = null, byte[]? imageData = null)
     {
         Id = id;
         Title = title;
         Description = description;
         Price = price;
         ImageData = imageData;
+        UserId = userId;
     }
 }

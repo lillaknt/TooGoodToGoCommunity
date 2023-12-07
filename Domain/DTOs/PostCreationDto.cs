@@ -15,12 +15,17 @@ public class PostCreationDto
     
     public byte[]? ImageData { get; set; }
 
-    public PostCreationDto(string title, string? description, decimal? price, byte[]? imageData)
+    // Add a property for the user ID
+    public int UserId { get; set; }
+
+    public PostCreationDto(string title, string? description, decimal? price, byte[]? imageData,int userId)
+   
     {
         Title = title;
         Description = description;
         Price = price;
         ImageData = imageData;
+        UserId = userId;
     }
 
     public PostCreationDto() { }

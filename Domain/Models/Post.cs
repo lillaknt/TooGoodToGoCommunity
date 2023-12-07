@@ -18,7 +18,7 @@ namespace Domain.Models
         public byte[]? ImageData { get; set; }
 
         // Reference to the user who created the post
-        //public User Creator { get; set; }
+        public User User { get; set; }
         
         public Post( string title, string? description, decimal? price, byte[]? imageData)
         {
@@ -29,14 +29,14 @@ namespace Domain.Models
             ImageData = imageData;
         }
 
-        /*public Post(int id, string? title, string? description, decimal? price, User creator)
+        public Post(int id, string? title, string? description, decimal? price, User user)
         {
             Id = id;
             Title = title;
             Description = description;
             Price = price;
-            Creator = creator;
-        }*/
+            User = user;
+        }
         
         
         // Parameterless constructor for serialization purposes

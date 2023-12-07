@@ -46,7 +46,11 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-            new Claim(ClaimTypes.Name, user.Email)
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.FirstName),
+            new Claim(ClaimTypes.PostalCode,user.PostCode?.ToString() ?? String.Empty), // use empty string if postcode is null
+            
         };
         return claims.ToList();
     }
@@ -65,7 +69,7 @@ public class AuthController : ControllerBase
             config["Jwt:Audience"],
             claims, 
             null,
-            DateTime.UtcNow.AddMinutes(60));
+            DateTime.UtcNow.AddMinutes(60)); 
     
         JwtSecurityToken token = new JwtSecurityToken(header, payload);
     

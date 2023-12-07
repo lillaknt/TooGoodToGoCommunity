@@ -15,23 +15,24 @@ namespace Application.Logic
         }
         
         
-        public async Task<Post> CreateAsync(PostCreationDto dto)
-        {
-            // Validate the post creation DTO
-            if (dto == null)
-            {
-                throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
-            }
-            
 
-            // Create a new post without associating it with a user for now
+                    
+                    public async Task<Post> CreateAsync(PostCreationDto dto)
+                   {
+                       // Validate the post creation DTO
+                       if (dto == null)
+                       {
+                           throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
+                       }
+
             var newPost = new Post
             {
                 Title = dto.Title,
                 ImageData = dto.ImageData,
                 Description = dto.Description,
                 Price = dto.Price,
-                
+                User =  new User { Id = dto.UserId } // Associate the creator with the post
+
                 // Creator will be set later when authentication is implemented
             };
 
