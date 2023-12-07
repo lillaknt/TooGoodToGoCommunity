@@ -18,7 +18,20 @@ public class PostHttpClient : IPostService
     
     public async Task CreateAsync(PostCreationDto dto)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/post",dto);
+        // Convert the image data to base64 before sending it to the server
+        string base64ImageData = dto.ImageData != null ? Convert.ToBase64String(dto.ImageData) : null;
+        // Include the base64-encoded image data in the DTO
+        var dtoWithImageData = new
+        {
+            dto.Title,
+            dto.Description,
+            dto.Price,
+            ImageData = base64ImageData,
+            dto.UserId
+            
+        };
+        
+        HttpResponseMessage response = await client.PostAsJsonAsync("/post",dtoWithImageData);
         if (!response.IsSuccessStatusCode)
         {
             string content = await response.Content.ReadAsStringAsync();
@@ -70,7 +83,7 @@ public class PostHttpClient : IPostService
 
     }
 
-    public async Task<PostUpdateDto> GetByIdAsync(int id)
+    public async Task<PostUpdateDto> GetByIdAsync(int id, int userid)
     {
         HttpResponseMessage response = await client.GetAsync($"/post/{id}");
         string content = await response.Content.ReadAsStringAsync();

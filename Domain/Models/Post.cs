@@ -14,25 +14,20 @@ namespace Domain.Models
      
         [Range(0, double.MaxValue, ErrorMessage = "Price must be a non-negative value")]
         public decimal? Price { get; set; }
+        
+        public byte[]? ImageData { get; set; }
 
         // Reference to the user who created the post
         public User User { get; set; }
         
-        public Post( string title, string? description, decimal? price)
+        public Post( string title, string? description, decimal? price, byte[]? imageData, User userid)
         {
             
             Title = title;
             Description = description;
             Price = price;
-        }
-
-        public Post(int id, string? title, string? description, decimal? price, User user)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-            Price = price;
-            User = user;
+            ImageData = imageData;
+            User = userid;
         }
         
         

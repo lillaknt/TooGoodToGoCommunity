@@ -13,32 +13,27 @@ namespace Application.Logic
         {
             this.postDao = postDao;
         }
-        
-        
 
-                    
-                    public async Task<Post> CreateAsync(PostCreationDto dto)
-                   {
-                       // Validate the post creation DTO
-                       if (dto == null)
-                       {
-                           throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
-                       }
+        public async Task<Post> CreateAsync(PostCreationDto dto)
+        {
+            // Validate the post creation DTO
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
+            }
 
-                       // You can add more validation logic for the DTO properties if needed
+            var newPost = new Post
+            {
+                Title = dto.Title,
+                ImageData = dto.ImageData,
+                Description = dto.Description,
+                Price = dto.Price,
+                User =  new User { Id = dto.UserId } // Associate the user with the post
+            };
 
-                       // Create a new post
-                       var newPost = new Post
-                       {
-                           Title = dto.Title,
-                           Description = dto.Description,
-                           Price = dto.Price,
-                           User =  new User { Id = dto.User.Id,Email = dto.User.Email,FirstName = dto.User.FirstName,PostCode = dto.User.PostCode} // Associate the creator with the post
-                       };
-
-                       // Save the post using the DAO
-                       return await postDao.CreateAsync(newPost);
-                   }
+            // Save the post using the DAO
+            return await postDao.CreateAsync(newPost);
+        }
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
@@ -71,19 +66,16 @@ namespace Application.Logic
             string titleToUse = updateDto.Title ?? existingPost.Title;
             string descriptionToUse = updateDto.Description ?? existingPost.Description;
             decimal priceToUse = updateDto.Price ?? existingPost.Price ?? 0;
+            
+            byte[]? imageDataToUse = updateDto.ImageData ?? existingPost.ImageData;
 
-            Post updated = new(titleToUse, descriptionToUse, priceToUse)
+            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse, new User{ Id = existingPost.User.Id })
             {
                 Id = existingPost.Id,
             };
 
             // Save the updated post
             await postDao.UpdateAsync(updated);
-
-            // Retrieve the updated post (optional, depending on your requirements)
-           // existingPost = await postDao.GetPostByIdAsync(existingPost.Id);
-
-           // return existingPost;
         }
 
         public async Task<Post?> GetPostByIdAsync(int postId)
@@ -95,7 +87,7 @@ namespace Application.Logic
 
             }
 
-            return new Post(post.Title, post.Description, post.Price);
+            return new Post(post.Title, post.Description, post.Price, post.ImageData, new User{ Id = post.User.Id });
         }
 
         public async Task DeleteAsync(int id)
@@ -107,12 +99,10 @@ namespace Application.Logic
                 throw new Exception($"Post with ID {id} not found.");
             }
             
-            //other logic if needed
 
             await postDao.DeleteAsync(id);
         }
 
 
-        // Implement other methods as needed
     }
 }

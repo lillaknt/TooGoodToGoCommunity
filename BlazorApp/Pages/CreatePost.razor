@@ -1,11 +1,9 @@
 @page "/CreatePost"
-
+@attribute [Authorize] 
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
 @using System.Security.Claims
-@using Domain.Models
 @inject IPostService postService
-@inject IUserService userService
 @inject NavigationManager navMgr
 
 <div class="card">
@@ -22,15 +20,19 @@
                 <label>Price:</label>
                 <input type="text" @bind="postPrice"/>
             </div>
-       
+       <div class="form-group field">
+           <label>Picture:</label>
+           <InputFile OnChange="HandleFileUpload" />
+       </div>
     
     <div class="button-row">
-            @if (!string.IsNullOrEmpty(msg))
-            {
-                <label style="color: red">@msg</label>
-            }
-            <button @onclick="Create" class="acceptbtn">Create</button>
-        </div>
+        @if (!string.IsNullOrEmpty(msg))
+        {
+            <label style="color: red">@msg</label>
+        }
+        <button @onclick="Create" class="acceptbtn">Create</button>
+    </div>
+     
 </div>
 
 @code {
@@ -39,8 +41,6 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
    private int userId;
-    private User loggedInUser;
-    
     //private string? postalCode;
     //private string? name;
     
@@ -62,7 +62,6 @@
         if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
         {
             userId = parsedUserId;
-            loggedInUser = await userService.
         }
         else
         {
@@ -77,10 +76,7 @@
     private string postTitle = "";
     private string postDescription = "";
     private decimal postPrice;
-   
-    
-    
-
+    private byte[]? imageData;
     private string msg = "";
 
    
@@ -90,8 +86,15 @@
        
      try
         {
-            PostCreationDto dto = new( postTitle, postDescription, postPrice, loggedInUser);
-            await postService.CreateAsync(dto); 
+    // Check if the imageData contains file data
+            if (imageData == null || imageData.Length == 0)
+            {
+                msg = "Please select an image.";
+                return;
+            }
+
+            PostCreationDto dto = new(postTitle, postDescription, postPrice, imageData, userId);
+            await postService.CreateAsync(dto);
             navMgr.NavigateTo("/ViewPosts");
         }
         catch (Exception e)
@@ -100,5 +103,18 @@
             msg = e.Message;
         }
     }
+    private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles().FirstOrDefault();
+
+        if (file != null)
+        {
+            await using var stream = file.OpenReadStream();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            imageData = memoryStream.ToArray();
+        }
+    }
     
+
 }

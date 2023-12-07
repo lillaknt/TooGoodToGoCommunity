@@ -10,9 +10,6 @@ public class SearchPostParametersDto
     public string? Description { get; set; }
     
     public decimal? Price { get; set; }
-
-    // Reference to the user who created the post
-    //public User Creator { get; set; }
         
     public SearchPostParametersDto(int? id, string? title, string? description, decimal? price)
     {

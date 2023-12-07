@@ -12,12 +12,17 @@
     
      @if (post != null)
      {
-         <p id="TitlePost">Title: @post.Title</p>
-         <p id="DescriptionPost">Description: @post.Description</p>
+         <p id="TitlePost">Title:@post.Title</p>
+         <p id="DescriptionPost">Post Description: @post.Description</p>
          <p id="PricePost">Price: @post.Price kr.</p>  
-         <p id="UserPost"> User id: @post.User.Id</p>  
-         <p id="UserPost"> User email: @post.User.Email</p>  
-         <p id="UserPost"> User name: @post.User.FirstName</p>  
+         <p id="UserId">User ID: @post.User.Id</p>  
+        
+         @if (post.ImageData != null && post.ImageData.Length > 0)
+         {
+             <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
+         }
+        
+        
                                       
          <div class="button-container">
           

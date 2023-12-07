@@ -65,9 +65,7 @@ public class PostFileDao : IPostDao
         return Task.FromResult(posts);
     }
 
- 
-
-
+    
     public Task<Post?> GetPostByIdAsync(int postId)
     {
         Post? post = context.Posts.FirstOrDefault(p => p.Id == postId);
@@ -104,9 +102,6 @@ public class PostFileDao : IPostDao
         context.SaveChanges();
         return Task.CompletedTask;
     }
-
-
-    // Other methods...
-
+    
     
 }
