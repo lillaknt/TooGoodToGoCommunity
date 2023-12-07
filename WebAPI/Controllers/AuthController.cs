@@ -49,8 +49,10 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, user.FirstName),
-            new Claim(ClaimTypes.PostalCode,user.PostCode?.ToString() ?? String.Empty), // use empty string if postcode is null
             
+            new Claim(ClaimTypes.PostalCode,user.PostCode?.ToString() ?? String.Empty), // use empty string if postcode is null
+            new Claim(ClaimTypes.UserData, user.ItemsPurchased?.ToString() ?? String.Empty),
+            new Claim(ClaimTypes.Thumbprint, user.CO2Saved?.ToString() ?? String.Empty),
         };
         return claims.ToList();
     }

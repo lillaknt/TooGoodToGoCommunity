@@ -27,7 +27,9 @@ public class UserLogic : IUserLogic
             Email = dto.Email,
             Password = dto.Password,
             FirstName = dto.FirstName,
-            PostCode = dto.PostCode
+            PostCode = dto.PostCode,
+            ItemsPurchased = dto.ItemsPurchased,
+            CO2Saved = dto.CO2Saved
             
         };
         
