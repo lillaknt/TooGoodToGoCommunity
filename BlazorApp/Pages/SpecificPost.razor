@@ -16,6 +16,13 @@
          <p id="DescriptionPost">Post Description: @post.Description</p>
          <p id="PricePost">Price: @post.Price kr.</p>  
          <p id="PricePost">User ID: @post.User.Id</p>  
+         <p id="TitlePost">@post.Title</p>
+         @if (post.ImageData != null && post.ImageData.Length > 0)
+         {
+             <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
+         }
+         <p id="DescriptionPost">@post.Description</p>
+         <p id="PricePost">@post.Price</p>  
                                       
          <div class="button-container">
           

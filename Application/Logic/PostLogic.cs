@@ -25,20 +25,48 @@ namespace Application.Logic
                            throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
                        }
 
-                       // You can add more validation logic for the DTO properties if needed
+            var newPost = new Post
+            {
+                Title = dto.Title,
+                ImageData = dto.ImageData,
+                Description = dto.Description,
+                Price = dto.Price,
+                User =  new User { Id = dto.UserId } // Associate the creator with the post
 
-                       // Create a new post
-                       var newPost = new Post
-                       {
-                           Title = dto.Title,
-                           Description = dto.Description,
-                           Price = dto.Price,
-                           User =  new User { Id = dto.UserId } // Associate the creator with the post
-                       };
+                // Creator will be set later when authentication is implemented
+            };
 
-                       // Save the post using the DAO
-                       return await postDao.CreateAsync(newPost);
-                   }
+            // Save the post using the DAO
+            return await postDao.CreateAsync(newPost);
+        }
+
+   
+
+        /*
+         
+         When authentication is in place
+         public async Task<Post> CreateAsync(PostCreationDto dto, User creator)
+        {
+            // Validate the post creation DTO
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
+            }
+
+            // You can add more validation logic for the DTO properties if needed
+
+            // Create a new post
+            var newPost = new Post
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                Price = dto.Price,
+                Creator = creator // Associate the creator with the post
+            };
+
+            // Save the post using the DAO
+            return await postDao.CreateAsync(newPost);
+        }*/
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
@@ -71,8 +99,10 @@ namespace Application.Logic
             string titleToUse = updateDto.Title ?? existingPost.Title;
             string descriptionToUse = updateDto.Description ?? existingPost.Description;
             decimal priceToUse = updateDto.Price ?? existingPost.Price ?? 0;
+            
+            byte[]? imageDataToUse = updateDto.ImageData ?? existingPost.ImageData;
 
-            Post updated = new(titleToUse, descriptionToUse, priceToUse)
+            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse)
             {
                 Id = existingPost.Id,
             };
@@ -95,7 +125,7 @@ namespace Application.Logic
 
             }
 
-            return new Post(post.Title, post.Description, post.Price);
+            return new Post(post.Title, post.Description, post.Price, post.ImageData);
         }
 
         public async Task DeleteAsync(int id)
