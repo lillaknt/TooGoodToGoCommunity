@@ -58,11 +58,7 @@
 @code {
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
-
-    private string? name;
-    private string? id;
-  
-    private IEnumerable<Claim>? userClaims;
+    
     private bool isLoggedIn;
 
     protected override async Task OnInitializedAsync()
@@ -75,14 +71,6 @@
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
         isLoggedIn = user.Identity != null;
-
-        if (isLoggedIn)
-        {
-            userClaims = user.Claims;
-            name = user.Identity!.Name!;
-            id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-           
-        }
     }
 
     protected override async Task OnParametersSetAsync()

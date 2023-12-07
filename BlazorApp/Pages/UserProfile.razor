@@ -12,6 +12,8 @@
         <h3>Hello @context.User.Identity.Name</h3>
         <p>Your email: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Email)).Value</p>
         <p>Your Postal code: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.PostalCode)).Value</p>
+        <p>Your Postal code: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.PostalCode)).Value</p>
+    <p>@context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.NameIdentifier)).Value </p>
        
         <p>
             Your claims include:

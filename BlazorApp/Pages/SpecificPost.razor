@@ -1,49 +1,65 @@
 @page "/SpecificPost/{postId:int}"
+
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
+@using System.Security.Claims
 @inject IPostService postService
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 
 
-<h3>SpecificPost</h3>
-<div class="postCard">
-    
-     @if (post != null)
-     {
-         <p id="TitlePost">Title:@post.Title</p>
-         <p id="DescriptionPost">Post Description: @post.Description</p>
-         <p id="PricePost">Price: @post.Price kr.</p>  
-         <p id="UserId">User ID: @post.User.Id</p>  
-        
-         @if (post.ImageData != null && post.ImageData.Length > 0)
-         {
-             <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
-         }
-        
-        
-                                      
-         <div class="button-container">
-          
-<button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
+ <h3>SpecificPost</h3>
 
-             <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
-         </div>                            
-     }
-</div>
+ 
+  
+<AuthorizeView>
+   
+             
+    <NotAuthorized>
+    </NotAuthorized>
+    <Authorized>
+       @if (post != null)
+           {
+               <p id="TitlePost">Title: @post.Title</p>
+               <p id="DescriptionPost">Post Description: @post.Description</p>
+               <p id="PricePost">Price: @post.Price kr.</p>
+               <p id="UserId">User ID: @post.User.Id</p>
+       
+               @if (post.ImageData != null && post.ImageData.Length > 0)
+               {
+                   <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
+               }
+       
+               <div class="button-container">
+                   @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
+                   {
+                       <button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
+                       <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
+                   }
+                   else{<button class="buttons" @onclick="() => EditButton(postId)">Buy</button>}
+                     
+               </div>
+           }
+    </Authorized>
+</AuthorizeView>
+
 @code {
      
-    [Parameter] public int postId { get; set; }
+    [Parameter] 
+    public int postId { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    private string? id;
+    private bool isLoggedIn;
 
     private Post post;
     private IEnumerable<Post> posts;
     private string msg = "";
     
-    
-    
     protected override async Task OnInitializedAsync()
     {
+        await UpdateAuthenticationState();
         try
         {
 
@@ -57,8 +73,23 @@
         }
     }
     
-    
+    private async Task UpdateAuthenticationState()
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        isLoggedIn = user.Identity != null;
 
+        if (isLoggedIn)
+        {
+            id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+           
+        }
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateAuthenticationState();
+    }
+    
     private async Task GetAsync(GetPostIdDto id)
     {
         try
@@ -100,4 +131,14 @@
         Navigation.NavigateTo("/ViewPosts");
     }
     
+    private void NavigateToCreateUser()
+    {
+    // Use NavigationManager to navigate to the CreateUser page
+        Navigation.NavigateTo("/CreateUser");
+    }
+    private void NavigateToLogin()
+    {
+    // Use NavigationManager to navigate to the CreateUser page
+        Navigation.NavigateTo("/Login");
+    }
 }
