@@ -4,9 +4,11 @@
 @using HttpClients.ClientInterfaces
 @inject IUserService UserService
 @attribute [Authorize] 
+<!-- this page is only displayed when logged in -->
+<!-- this page is an example on how to get our logged in user information when we only need to show it in the HTML -->
 
 <h3>User Profile</h3>
-<p>You can only access this page if you're logged in. Given that you're seeing this, you're logged in</p>
+<p>You can only access this page, if you're logged in. Given that you're seeing this, you're logged in</p>
 
 <AuthorizeView>
     <Authorized>

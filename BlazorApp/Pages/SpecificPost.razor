@@ -2,102 +2,132 @@
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
+@using System.Security.Claims
 @inject IPostService postService
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 
-
 <h3>SpecificPost</h3>
-<div class="postCard">
-    
-     @if (post != null)
-     {
-         <p id="TitlePost">Title:@post.Title</p>
-         <p id="DescriptionPost">Post Description: @post.Description</p>
-         <p id="PricePost">Price: @post.Price kr.</p>  
-         <p id="UserId">User ID: @post.User.Id</p>  
-        
-         @if (post.ImageData != null && post.ImageData.Length > 0)
-         {
-             <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
-         }
-        
-        
-                                      
-         <div class="button-container">
-          
-<button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
 
-             <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
-         </div>                            
-     }
-</div>
+<AuthorizeView>
+    <NotAuthorized></NotAuthorized>
+    <Authorized>
+        @if (post != null)
+        {
+            <p id="TitlePost">Title: @post.Title</p>
+            <p id="DescriptionPost">Post Description: @post.Description</p>
+            <p id="PricePost">Price: @post.Price kr.</p>
+            <p id="UserId">User ID: @post.User.Id</p>
+
+            @if (post.ImageData != null && post.ImageData.Length > 0)
+            {
+                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150"/>
+            }
+
+            <div class="button-container">
+                @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
+                {
+                    <button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
+                    <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
+                }
+                else
+                {
+                    <button class="buttons" @onclick="() => EditButton(postId)">Buy</button>
+                }
+            </div>
+        }
+    </Authorized>
+</AuthorizeView>
+
 @code {
-     
-    [Parameter] public int postId { get; set; }
+
+    [Parameter]
+    public int postId { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private string? id;
+    private bool isLoggedIn;
 
     private Post post;
     private IEnumerable<Post> posts;
     private string msg = "";
-    
-    
-    
+
     protected override async Task OnInitializedAsync()
     {
+        await UpdateAuthenticationState();
         try
         {
-
-            GetPostIdDto idDto = new GetPostIdDto();
+            var idDto = new GetPostIdDto();
             idDto.SetId(postId);
-            await GetAsync(idDto);
+            await GetPostAsync(idDto);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            LogException(ex);
         }
     }
-    
-    
 
-    private async Task GetAsync(GetPostIdDto id)
+    private async Task UpdateAuthenticationState()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+        isLoggedIn = user.Identity != null;
+
+        if (isLoggedIn)
+        {
+            id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateAuthenticationState();
+    }
+
+    private async Task GetPostAsync(GetPostIdDto idDto)
     {
         try
         {
-            posts = await postService.GetId(id);
+            posts = await postService.GetId(idDto);
             post = posts.First();
-
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            LogException(ex);
             throw;
         }
     }
-    
-    private void EditButton(int id)
+
+    private void EditButton(int postId)
     {
-        Navigation.NavigateTo($"EditPost/{id}");
+        Navigation.NavigateTo($"EditPost/{postId}");
     }
-    
-    
-    private async Task RemoveTodo(int id)
+
+    private async Task RemoveTodo(int postId)
     {
         msg = "";
         try
         {
-            await postService.DeleteAsync(id);
-        
+            await postService.DeleteAsync(postId);
+
             var list = new List<Post>(posts!);
-            list.RemoveAll(post => post.Id == id);
+            list.RemoveAll(p => p.Id == postId);
             posts = list.AsEnumerable();
-         
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            msg = e.Message;
+            LogException(ex);
+            msg = ex.Message;
         }
         Navigation.NavigateTo("/ViewPosts");
     }
-    
+
+    private void LogException(Exception ex)
+    {
+    // Log exception details using your preferred logging mechanism
+        Console.WriteLine(ex);
+    }
+
 }

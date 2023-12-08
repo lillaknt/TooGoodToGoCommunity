@@ -30,7 +30,7 @@ public class UserHttpClient : IUserService
         })!;
         return user;
     }
-
+    
     public async Task<IEnumerable<User>> GetUsersAsync(string? emailContains = null)
     {
         string uri = "/user";

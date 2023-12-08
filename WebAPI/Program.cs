@@ -1,10 +1,7 @@
-using System.Net;
 using System.Text;
 using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
-using Domain.Auth;
-//using EFCDataAccess.DAOs;
 using FileData;
 using FileData.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,12 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<FileContext>();
-builder.Services.AddScoped<IUserDao, UserFileDao>(); //UserEfcDao
+builder.Services.AddScoped<IUserDao, UserFileDao>(); 
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 
 builder.Services.AddScoped<IPostDao, PostFileDao>();
@@ -30,7 +26,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -41,14 +37,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 //AuthorizationPolicies.AddPolicies(builder.Services); 
-    
-var app = builder.Build();
 
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true) // allow any origin
-    .AllowCredentials());
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
