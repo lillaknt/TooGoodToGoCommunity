@@ -1,0 +1,14 @@
+{
+  "Users": [
+    {
+      "Id": 1,
+      "Email": "condog@via",
+      "FirstName": "cjc",
+      "Password": "cjc",
+      "PostCode": 0,
+      "ItemsPurchased": 0,
+      "CO2Saved": 0
+    }
+  ],
+  "Posts": []
+}
