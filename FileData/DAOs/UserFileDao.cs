@@ -57,4 +57,24 @@ public class UserFileDao : IUserDao
         );
         return Task.FromResult(existing);
     }
+
+    public Task UpdateUserAsync(UserUpdateDto dto)
+    {
+        // Check if the user with the given ID exists in the context
+        User? existingUser = context.Users.FirstOrDefault(u => u.Email == dto.Email);
+
+        if (existingUser != null)
+        {
+            // Update the properties of the existing user
+            existingUser.FirstName = dto.FirstName;
+            existingUser.PostCode = dto.PostCode;
+            existingUser.ItemsPurchased = dto.ItemsPurchased;
+            existingUser.CO2Saved = dto.CO2Saved; // Update other properties as needed
+
+            // Save changes to the context
+            context.SaveChanges();
+        }
+
+        return Task.CompletedTask;
+    }
 }

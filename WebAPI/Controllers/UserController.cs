@@ -60,4 +60,20 @@ public class UserController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError, new { Message = ex.Message });
         }
     }
+    
+    
+    [HttpPatch]
+    public async Task<ActionResult> UpdateUserAsync(UserUpdateDto dto)
+    {
+        try
+        {
+            await userLogic.UpdateUserAsync(dto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

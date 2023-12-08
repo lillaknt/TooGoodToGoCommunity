@@ -30,7 +30,7 @@ public class UserHttpClient : IUserService
         })!;
         return user;
     }
-    
+
     public async Task<IEnumerable<User>> GetUsersAsync(string? emailContains = null)
     {
         string uri = "/user";
@@ -38,6 +38,7 @@ public class UserHttpClient : IUserService
         {
             uri += $"?email={emailContains}";
         }
+
         HttpResponseMessage response = await client.GetAsync(uri);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
@@ -51,4 +52,16 @@ public class UserHttpClient : IUserService
         })!;
         return users;
     }
-}
+
+    public async Task UpdateUserAsync(UserUpdateDto dto)
+    {
+        HttpResponseMessage response = await client.PatchAsJsonAsync("/user", dto);
+    
+        if (!response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            throw new Exception(result);
+        }
+    }
+
+    }

@@ -98,4 +98,30 @@ public class UserLogic : IUserLogic
         return Task.CompletedTask;
     }
     
+    public async Task UpdateUserAsync(UserUpdateDto updateDto)
+    {
+        // Fetch the existing user by email
+        User? existingUser = await userDao.GetByEmailAsync(updateDto.Email);
+
+        if (existingUser == null)
+        {
+            throw new Exception($"User with email {updateDto.Email} not found.");
+        }
+
+        // Create a new UserUpdateDto based on existing user
+        UserUpdateDto userUpdateDto = new UserUpdateDto
+        {
+            Email = existingUser.Email,
+            FirstName = updateDto.FirstName ?? existingUser.FirstName,
+            PostCode = updateDto.PostCode ?? existingUser.PostCode,
+            // Add other properties as needed
+        };
+
+        // Update the user using the UserUpdateDto
+        await userDao.UpdateUserAsync(userUpdateDto);
+    }
+
+   
+
+    
 }

@@ -9,4 +9,5 @@ public interface IUserDao
     Task<User?> GetByEmailAsync(string email);
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters);
     Task<User?> GetByIdAsync(int id); 
+    Task UpdateUserAsync(UserUpdateDto user);
 }

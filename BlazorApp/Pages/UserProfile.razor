@@ -1,11 +1,12 @@
 @page "/UserProfile"
 @using System.Security.Claims
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject IUserService UserService
 @attribute [Authorize] 
-<!-- this page is only displayed when logged in -->
-<!-- this page is an example on how to get our logged in user information when we only need to show it in the HTML -->
 
 <h3>User Profile</h3>
-<p>You can only access this page, if you're logged in. Given that you're seeing this, you're logged in</p>
+<p>You can only access this page if you're logged in. Given that you're seeing this, you're logged in</p>
 
 <AuthorizeView>
     <Authorized>
@@ -13,7 +14,7 @@
         <p>Your email: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Email)).Value</p>
         <p>Your Postal code: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.PostalCode)).Value</p>
         <p>Items Purchased: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.UserData)).Value</p>
-        <p>Translates to : @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Thumbprint)).Value CO2 Saved</p>
+        <p>Translates to: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Thumbprint)).Value CO2 Saved</p>
         <p>
             Your claims include:
             <ol>
@@ -25,6 +26,23 @@
                 }
             </ol>
         </p>
+        
+        <!-- Add Edit button to toggle the display of input fields -->
+        <button class="btn btn-primary" @onclick="ToggleEdit">Edit Profile</button>
+
+        <!-- Display input fields based on the value of isEditing -->
+        @if (isEditing)
+        {
+            <div>
+                <label>First Name:</label>
+                 <input type="text" class="form-control" @bind="firstName" @bind:event="oninput" />
+
+                <label>Postal Code:</label>
+                <input type="number" class="form-control" @bind="postCode" @bind:event="oninput" />
+
+                <button class="btn btn-success" @onclick="SaveChanges">Save Changes</button>
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <p>You are not logged in.</p>
@@ -32,5 +50,50 @@
 </AuthorizeView>
 
 @code {
-    
+    private bool isEditing = false;
+    private string firstName = "";
+    private int postCode = 0;
+    private string resultMsg = "";
+    private string color = "";
+    private string email = "";
+
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+    }
+
+    private void ToggleEdit()
+    {
+        isEditing = !isEditing;
+    }
+
+    private async Task SaveChanges()
+    {
+        resultMsg = "";
+
+        try
+        {
+            await UserService.UpdateUserAsync(new UserUpdateDto { Email = email, FirstName = firstName, PostCode = postCode });
+            ResetForm();
+            resultMsg = "User successfully updated";
+            color = "green";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+    }
+
+    private void ResetForm()
+    {
+        firstName = "";
+        postCode = 0;
+    }
 }
