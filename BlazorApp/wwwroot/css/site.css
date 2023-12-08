@@ -66,3 +66,78 @@ a, .btn-link {
 .blazor-error-boundary::after {
     content: "An error has occurred."
 }
+
+:root {
+    --rz-white: #ffffff;
+    --rz-black: #000000;
+    --rz-base-50: #ffffff;
+    --rz-base-100: #f6f7fa;
+    --rz-base-200: #e9edf0;
+    --rz-base-300: #dadfe2;
+    --rz-base-400: #c1c9cb;
+    --rz-base-500: #95a4a8;
+    --rz-base-600: #77858b;
+    --rz-base-700: #545e61;
+    --rz-base-800: #3a474d;
+    --rz-base-900: #28363c;
+    --rz-primary: #598087;
+    --rz-primary-light: #6d8f95;
+    --rz-primary-lighter: rgba(89, 128, 135, 0.16);
+    --rz-primary-dark: #52767c;
+    --rz-primary-darker: #436065;
+    --rz-secondary: #80a4ab;
+    --rz-secondary-light: #8fafb5;
+    --rz-secondary-lighter: rgba(128, 164, 171, 0.2);
+    --rz-secondary-dark: #76979d;
+    --rz-secondary-darker: #607b80;
+    --rz-info: #2cc8c8;
+    --rz-info-light: #4ed1d1;
+    --rz-info-lighter: rgba(44, 200, 200, 0.2);
+    --rz-info-dark: #25a8a8;
+    --rz-info-darker: #219696;
+    --rz-success: #5dbf74;
+    --rz-success-light: #77c98a;
+    --rz-success-lighter: rgba(93, 191, 116, 0.16);
+    --rz-success-dark: #4ea061;
+    --rz-success-darker: #468f57;
+    --rz-warning: #fac152;
+    --rz-warning-light: #fbcb6e;
+    --rz-warning-lighter: rgba(250, 193, 82, 0.2);
+    --rz-warning-dark: #d2a245;
+    --rz-warning-darker: #bc913e;
+    --rz-danger: #f9777f;
+    --rz-danger-light: #fa8d93;
+    --rz-danger-lighter: rgba(249, 119, 127, 0.2);
+    --rz-danger-dark: #d1646b;
+    --rz-danger-darker: #bb595f;
+    --rz-on-primary: #ffffff;
+    --rz-on-primary-light: #ffffff;
+    --rz-on-primary-lighter: #598087;
+    --rz-on-primary-dark: #ffffff;
+    --rz-on-primary-darker: #ffffff;
+    --rz-on-secondary: #ffffff;
+    --rz-on-secondary-light: #ffffff;
+    --rz-on-secondary-lighter: #80a4ab;
+    --rz-on-secondary-dark: #ffffff;
+    --rz-on-secondary-darker: #ffffff;
+    --rz-on-info: #ffffff;
+    --rz-on-info-light: #ffffff;
+    --rz-on-info-lighter: #2cc8c8;
+    --rz-on-info-dark: #ffffff;
+    --rz-on-info-darker: #ffffff;
+    --rz-on-success: #ffffff;
+    --rz-on-success-light: #ffffff;
+    --rz-on-success-lighter: #5dbf74;
+    --rz-on-success-dark: #ffffff;
+    --rz-on-success-darker: #ffffff;
+    --rz-on-warning: #ffffff;
+    --rz-on-warning-light: #ffffff;
+    --rz-on-warning-lighter: #fac152;
+    --rz-on-warning-dark: #ffffff;
+    --rz-on-warning-darker: #ffffff;
+    --rz-on-danger: #ffffff;
+    --rz-on-danger-light: #ffffff;
+    --rz-on-danger-lighter: #f9777f;
+    --rz-on-danger-dark: #ffffff;
+    --rz-on-danger-darker: #ffffff;
+}
