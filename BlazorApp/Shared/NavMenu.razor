@@ -1,59 +1,18 @@
 ﻿@using System.Security.Claims
+<div class="nav-item px-3">
+    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+        <span class="oi oi-home" aria-hidden="true"></span> Home
+    </NavLink>
+</div>
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Too Good To Go - Community</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+@foreach (var link in GetNavigationLinks())
+{
+    <div class="nav-item px-3">
+        <NavLink class="nav-link" href="@link.Url">
+            <span class="@link.IconClass" aria-hidden="true"></span> @link.Text
+        </NavLink>
     </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        @if (isLoggedIn)
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="UserProfile">
-                    <span class="oi oi-list" aria-hidden="true"></span> User Profile
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="ShowCredentials2">
-                    <span class="oi oi-list" aria-hidden="true"></span> Show Credentials
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="CreatePost">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create New Post
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="ViewPosts">
-                    <span class="oi oi-list" aria-hidden="true"></span> View Posts
-                </NavLink>
-            </div>
-        }
-        else
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Login">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Login
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="CreateUser">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create User
-                </NavLink>
-            </div>
-        }
-    </nav>
-</div>
+}
 
 @code {
     [CascadingParameter]
@@ -69,8 +28,7 @@
     private async Task UpdateAuthenticationState()
     {
         AuthenticationState authState = await AuthState;
-        ClaimsPrincipal user = authState.User;
-        isLoggedIn = user.Identity != null;
+        isLoggedIn = authState.User.Identity?.IsAuthenticated ?? false;
     }
 
     protected override async Task OnParametersSetAsync()
@@ -85,5 +43,41 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+    
+    private List<NavigationLink> GetNavigationLinks()
+    {
+        if (isLoggedIn)
+        {
+            return new List<NavigationLink>
+            {
+                new NavigationLink("UserProfile", "oi oi-list", "User Profile"),
+                new NavigationLink("ShowCredentials2", "oi oi-list", "Show Credentials"),
+                new NavigationLink("CreatePost", "oi oi-plus", "Create New Post"),
+                new NavigationLink("ViewPosts", "oi oi-list", "View Posts"),
+            };
+        }
+        else
+        {
+            return new List<NavigationLink>
+            {
+                new NavigationLink("Login", "oi oi-plus", "Login"),
+                new NavigationLink("CreateUser", "oi oi-plus", "Create User"),
+            };
+        }
+    }
+
+    private class NavigationLink
+    {
+        public NavigationLink(string url, string iconClass, string text)
+        {
+            Url = url;
+            IconClass = iconClass;
+            Text = text;
+        }
+
+        public string Url { get; }
+        public string IconClass { get; }
+        public string Text { get; }
     }
 }
