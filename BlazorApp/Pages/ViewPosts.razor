@@ -6,27 +6,25 @@
 
 
 <div>
-    <h3>View Posts</h3> 
+    <h3>View Posts</h3>
     @if (posts != null)
     {
         <ul>
-              @foreach (var item in posts)
-              {
-                  <div class="postCard" @onclick="() => OpenSpecificPost(item.Id)">
-    
-                      <p id="TitlePost">@item.Title</p>
-                      @if (item.ImageData != null && item.ImageData.Length > 0)
-                      {
-                          <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" alt="Post Image" 
-                               width="150"/>
-                      }
-                      <p id="PricePost">@item.Price</p>
-                      
-                      
-                      
-                      
-                  </div>
-              }
+            @foreach (var item in posts)
+            {
+                <div class="postCard" @onclick="() => OpenSpecificPost(item.Id)">
+
+                    <p id="TitlePost">@item.Title</p>
+                    @if (item.ImageData != null && item.ImageData.Length > 0)
+                    {
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" alt="Post Image"
+                             width="150"/>
+                    }
+                    <p id="PricePost">@item.Price</p>
+
+
+                </div>
+            }
 
         </ul>
     }
@@ -64,5 +62,6 @@
     private async Task LoadPosts()
     {
         posts = await postService.GetAsync(null, null, null);
-    }   
+    }
+
 }

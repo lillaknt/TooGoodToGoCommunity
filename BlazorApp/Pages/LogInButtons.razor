@@ -1,9 +1,8 @@
-@using HttpClients.ClientInterfaces
 @inject NavigationManager navMgr
 @inject IAuthService authService
 
 @page "/LogInButtons"
-
+@using HttpClients.ClientInterfaces
 
 
 <AuthorizeView>
@@ -16,6 +15,7 @@
 </AuthorizeView>
 
 @code {
+
     private void Login()
     {
         navMgr.NavigateTo("/LogIn");
@@ -26,4 +26,5 @@
         await authService.LogoutAsync();
         navMgr.NavigateTo("/");
     }
+
 }

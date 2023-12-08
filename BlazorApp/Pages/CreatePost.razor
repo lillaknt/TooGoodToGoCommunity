@@ -1,30 +1,30 @@
 @page "/CreatePost"
-@attribute [Authorize] 
-@using Domain.DTOs
 @using HttpClients.ClientInterfaces
 @using System.Security.Claims
+@using Domain.DTOs
+@attribute [Authorize] 
 @inject IPostService postService
 @inject NavigationManager navMgr
 
 <div class="card">
-        <h3>Create Post</h3>
-        <div class="form-group field">
-            <label>Title:</label>
-            <input type="text" @bind="postTitle"/>
-        </div>
+    <h3>Create Post</h3>
+    <div class="form-group field">
+        <label>Title:</label>
+        <input type="text" @bind="postTitle"/>
+    </div>
     <div class="form-group field">
         <label>Description:</label>
         <input type="text" @bind="postDescription"/>
     </div>
-     <div class="form-group field">
-                <label>Price:</label>
-                <input type="text" @bind="postPrice"/>
-            </div>
-       <div class="form-group field">
-           <label>Picture:</label>
-           <InputFile OnChange="HandleFileUpload" />
-       </div>
-    
+    <div class="form-group field">
+        <label>Price:</label>
+        <input type="text" @bind="postPrice"/>
+    </div>
+    <div class="form-group field">
+        <label>Picture:</label>
+        <InputFile OnChange="HandleFileUpload"/>
+    </div>
+
     <div class="button-row">
         @if (!string.IsNullOrEmpty(msg))
         {
@@ -32,34 +32,35 @@
         }
         <button @onclick="Create" class="acceptbtn">Create</button>
     </div>
-     
+
 </div>
 
 @code {
-    
-   //getting our logegd in user info
+
+    //getting our logegd in user info
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
-   private int userId;
+
+    private int userId;
     //private string? postalCode;
     //private string? name;
-    
- private bool isLoggedIn;
+
+    private bool isLoggedIn;
 
     protected override async Task OnInitializedAsync()
     {
-        AuthenticationState authState = await AuthState;
-        ClaimsPrincipal user = authState.User;
+        var authState = await AuthState;
+        var user = authState.User;
         isLoggedIn = user.Identity != null;
-        
+
         if (!isLoggedIn) return;
     //postalCode = user.FindFirst(ClaimTypes.PostalCode)?.Value;
     // name = user.Identity!.Name!;
-        
-        //retrieve user ID and convert it to id
+
+    //retrieve user ID and convert it to id
         var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
 
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var parsedUserId))
         {
             userId = parsedUserId;
         }
@@ -67,24 +68,22 @@
         {
             userId = 0; // Set a default value or handle it in a way that makes sense for your application
             msg = "Unable to retrieve user ID from authentication.";
-
         }
-        
     }
-    
-    
+
+
     private string postTitle = "";
     private string postDescription = "";
     private decimal postPrice;
     private byte[]? imageData;
     private string msg = "";
 
-   
+
     private async Task Create()
     {
         msg = "";
-       
-     try
+
+        try
         {
     // Check if the imageData contains file data
             if (imageData == null || imageData.Length == 0)
@@ -103,6 +102,7 @@
             msg = e.Message;
         }
     }
+
     private async Task HandleFileUpload(InputFileChangeEventArgs e)
     {
         var file = e.GetMultipleFiles().FirstOrDefault();
@@ -115,6 +115,6 @@
             imageData = memoryStream.ToArray();
         }
     }
-    
+
 
 }

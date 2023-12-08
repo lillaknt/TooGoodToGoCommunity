@@ -1,5 +1,4 @@
 @page "/SpecificPost/{postId:int}"
-
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
@@ -22,7 +21,7 @@
 
             @if (post.ImageData != null && post.ImageData.Length > 0)
             {
-                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150" />
+                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150"/>
             }
 
             <div class="button-container">
@@ -41,10 +40,13 @@
 </AuthorizeView>
 
 @code {
+
     [Parameter]
     public int postId { get; set; }
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private string? id;
     private bool isLoggedIn;
 
@@ -57,7 +59,7 @@
         await UpdateAuthenticationState();
         try
         {
-            GetPostIdDto idDto = new GetPostIdDto();
+            var idDto = new GetPostIdDto();
             idDto.SetId(postId);
             await GetPostAsync(idDto);
         }
@@ -69,8 +71,8 @@
 
     private async Task UpdateAuthenticationState()
     {
-        AuthenticationState authState = await AuthState;
-        ClaimsPrincipal user = authState.User;
+        var authState = await AuthState;
+        var user = authState.User;
         isLoggedIn = user.Identity != null;
 
         if (isLoggedIn)
@@ -124,7 +126,8 @@
 
     private void LogException(Exception ex)
     {
-        // Log exception details using your preferred logging mechanism
+    // Log exception details using your preferred logging mechanism
         Console.WriteLine(ex);
     }
+
 }

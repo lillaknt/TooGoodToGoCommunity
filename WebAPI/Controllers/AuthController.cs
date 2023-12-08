@@ -21,16 +21,17 @@ public class AuthController : ControllerBase
         this.config = config;
         this.logic = logic;
     }
-    
-    
-    [HttpPost, Route("login")]
+
+
+    [HttpPost]
+    [Route("login")]
     public async Task<ActionResult> Login([FromBody] UserLoginDto dto)
     {
         try
         {
-            User user = await logic.ValidateUser(dto.Email,dto.Password);
-            string token = GenerateJwt(user);
-    
+            var user = await logic.ValidateUser(dto.Email, dto.Password);
+            var token = GenerateJwt(user);
+
             return Ok(token);
         }
         catch (Exception e)
@@ -38,7 +39,7 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
+
     private List<Claim> GenerateClaims(User user)
     {
         var claims = new[]
@@ -49,32 +50,31 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, user.FirstName),
-            new Claim(ClaimTypes.PostalCode,user.PostCode?.ToString() ?? String.Empty), // use empty string if postcode is null
-            
+            new Claim(ClaimTypes.PostalCode,
+                user.PostCode?.ToString() ?? string.Empty) // use empty string if postcode is null
         };
         return claims.ToList();
     }
-    
+
     private string GenerateJwt(User user)
     {
-        List<Claim> claims = GenerateClaims(user);
-    
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-        SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-    
-        JwtHeader header = new JwtHeader(signIn);
-    
-        JwtPayload payload = new JwtPayload(
+        var claims = GenerateClaims(user);
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+        var header = new JwtHeader(signIn);
+
+        var payload = new JwtPayload(
             config["Jwt:Issuer"],
             config["Jwt:Audience"],
-            claims, 
+            claims,
             null,
-            DateTime.UtcNow.AddMinutes(60)); 
-    
-        JwtSecurityToken token = new JwtSecurityToken(header, payload);
-    
-        string serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
+            DateTime.UtcNow.AddMinutes(60));
+
+        var token = new JwtSecurityToken(header, payload);
+
+        var serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
         return serializedToken;
     }
-    
 }

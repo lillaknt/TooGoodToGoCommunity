@@ -15,7 +15,7 @@ public class UserFileDao : IUserDao
 
     public Task<User> CreateAsync(User user)
     {
-        int userId = 1;
+        var userId = 1;
         if (context.Users.Any())
         {
             userId = context.Users.Max(u => u.Id);
@@ -29,30 +29,29 @@ public class UserFileDao : IUserDao
 
         return Task.FromResult(user);
     }
-    
+
 
     public Task<User?> GetByEmailAsync(string email)
     {
-        User? existing = context.Users.FirstOrDefault(u =>
+        var existing = context.Users.FirstOrDefault(u =>
             u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)
         );
         return Task.FromResult(existing);
     }
-    
+
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
     {
-        IEnumerable<User> users = context.Users.AsEnumerable();
+        var users = context.Users.AsEnumerable();
         if (searchParameters.EmailContains != null)
-        {
-            users = context.Users.Where(u => u.Email.Contains(searchParameters.EmailContains, StringComparison.OrdinalIgnoreCase));
-        }
-    
+            users = context.Users.Where(u =>
+                u.Email.Contains(searchParameters.EmailContains, StringComparison.OrdinalIgnoreCase));
+
         return Task.FromResult(users);
     }
-    
+
     public Task<User?> GetByIdAsync(int id)
     {
-        User? existing = context.Users.FirstOrDefault(u =>
+        var existing = context.Users.FirstOrDefault(u =>
             u.Id == id
         );
         return Task.FromResult(existing);

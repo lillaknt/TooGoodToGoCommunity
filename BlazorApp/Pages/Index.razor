@@ -8,29 +8,31 @@
 
         <h1>Test Website: Too Good To Go - Community</h1>
         <button @onclick="NavigateToCreateUser" class="btn btn-primary">Create User</button>
- <button @onclick="NavigateToLogin" class="btn btn-primary">Login</button>
-        </NotAuthorized>
-        <Authorized>
-      
-           <div class="card">
-               <h3>Hello, @context.User.Identity.Name</h3>
-               <p>Welcome to Too Good To Go - Community</p>
-                     
-                </div>
-            </Authorized>
-        </AuthorizeView>
+        <button @onclick="NavigateToLogin" class="btn btn-primary">Login</button>
+    </NotAuthorized>
+    <Authorized>
 
+        <div class="card">
+            <h3>Hello, @context.User.Identity.Name</h3>
+            <p>Welcome to Too Good To Go - Community</p>
+
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 
 @code {
+
     private void NavigateToCreateUser()
     {
     // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/CreateUser");
     }
+
     private void NavigateToLogin()
     {
     // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/Login");
     }
+
 }
