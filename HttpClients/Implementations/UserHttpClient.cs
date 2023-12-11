@@ -31,7 +31,7 @@ public class UserHttpClient : IUserService
         return user;
     }
     
-    public async Task<IEnumerable<User>> GetUsersAsync(string? emailContains = null)
+    public async Task<IEnumerable<User>> GetAsync(string? emailContains = null)
     {
         string uri = "/user";
         if (!string.IsNullOrEmpty(emailContains))

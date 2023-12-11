@@ -52,7 +52,7 @@
 
         try
         {
-            await UserService.CreateAsync(new UserCreationDto(email, firstName, password, postCode));
+            await UserService.CreateAsync(new UserCreationDto(email, firstName, password, postCode, itemsPurchased, co2Saved));
             ResetForm();
             resultMsg = "User successfully created";
             color = "green";

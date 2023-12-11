@@ -91,10 +91,7 @@ public class UserLogic : IUserLogic
         {
             throw new ValidationException("First name cannot be null");
         }
-        
-        
         userDao.CreateAsync(user);
-        
         return Task.CompletedTask;
     }
     
@@ -106,15 +103,16 @@ public class UserLogic : IUserLogic
         if (existingUser == null)
         {
             throw new Exception($"User with email {updateDto.Email} not found.");
-        }
-
+        } 
         // Create a new UserUpdateDto based on existing user
         UserUpdateDto userUpdateDto = new UserUpdateDto
         {
             Email = existingUser.Email,
             FirstName = updateDto.FirstName ?? existingUser.FirstName,
             PostCode = updateDto.PostCode ?? existingUser.PostCode,
-            // Add other properties as needed
+            ItemsPurchased = updateDto.ItemsPurchased?? existingUser.ItemsPurchased,
+            CO2Saved = updateDto.CO2Saved ?? existingUser.CO2Saved,
+            
         };
 
         // Update the user using the UserUpdateDto
