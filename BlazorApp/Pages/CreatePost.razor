@@ -2,38 +2,61 @@
 @using HttpClients.ClientInterfaces
 @using System.Security.Claims
 @using Domain.DTOs
-@attribute [Authorize] 
+
 @inject IPostService postService
 @inject NavigationManager navMgr
-
-<div class="card">
-    <h3>Create Post</h3>
-    <div class="form-group field">
-        <label>Title:</label>
-        <input type="text" @bind="postTitle"/>
-    </div>
-    <div class="form-group field">
-        <label>Description:</label>
-        <input type="text" @bind="postDescription"/>
-    </div>
-    <div class="form-group field">
-        <label>Price:</label>
-        <input type="text" @bind="postPrice"/>
-    </div>
-    <div class="form-group field">
-        <label>Picture:</label>
-        <InputFile OnChange="HandleFileUpload"/>
-    </div>
-
-    <div class="button-row">
-        @if (!string.IsNullOrEmpty(msg))
-        {
-            <label style="color: red">@msg</label>
-        }
-        <button @onclick="Create" class="acceptbtn">Create</button>
-    </div>
-
+<PageTitle>Create Post</PageTitle>
+<div class="top-bar-nav">
+    <TopBar Title="Add Item" />
 </div>
+
+        <AuthorizeView>
+            <NotAuthorized>
+        
+                <div class="button-container">
+                    Please Login
+                    <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
+                </div>
+                
+            </NotAuthorized>
+            <Authorized>
+                <div class="container">
+                  
+                      <div class="field">
+                            <label>Add images</label>
+                            <InputFile class="ui-fileupload"  OnChange="HandleFileUpload"/> 
+                        </div>
+                    <div class="field">
+                        <label>Title</label>
+                        <input type="text" class="form-control" @bind="postTitle" @bind:event="oninput"/>
+                    </div>
+                
+                
+                    <div class="field">
+                        <label>Description</label>
+                        <input type="text" class="form-control" @bind="postDescription" @bind:event="oninput"/>
+                    </div>
+                
+                    <div class="field">
+                        <label>Price</label>
+                        <input type="text" class="form-control" @bind="postPrice" @bind:event="oninput"/>
+                    </div>
+                    
+                  
+                    
+                
+                    <div class="button-row">
+                        @if (!string.IsNullOrEmpty(msg))
+                        {
+                            <label style="color: red">@msg</label>
+                        }
+                        <button @onclick="Create" class="button-primary">Publish</button>
+                    </div>
+                
+                </div>
+            </Authorized>
+     </AuthorizeView>
+
 
 @code {
 
@@ -115,6 +138,9 @@
             imageData = memoryStream.ToArray();
         }
     }
-
+    private void NavigateToLogin()
+    {
+        navMgr.NavigateTo("/Login");
+    }
 
 }

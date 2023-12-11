@@ -1,6 +1,75 @@
 @page "/PurchaseConfirmation"
-<h3>PurchaseConfirmation</h3>
+<PageTitle>Order Confirmation</PageTitle>
+<div class="top-bar-nav">
+    <TopBar Title="Success" />
+</div>
+
+
+@*
+@page "/ViewPosts"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Orientation = Radzen.Orientation
+@inject IPostService postService
+@inject NavigationManager Navigation
+
+<PageTitle>Discover</PageTitle>
+
+@if (posts != null)
+{
+    @foreach (var item in posts)
+    { 
+                
+        <RadzenCard @onclick="() => OpenSpecificPost(item.Id)">
+            <RadzenStack JustifyContent="JustifyContent.Start" Gap="0.5rem" Class="rz-p-4">
+                @if (item.ImageData != null && item.ImageData.Length > 0)
+                {
+                    <RadzenImage Path="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" Style="max-width: 20vh; height: auto; display: flex; vertical-align: middle"/>
+                }
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0" Style="font-weight: normal; font-size: 12px"><b>@item.Title</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0" Style="font-weight: normal; font-size: 12px"><b>Price: @item.Price kr.</b></RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+                 
+    }
+           
+        
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
 
 @code {
-    
+    private IEnumerable<Post>? posts;
+    private string msg = "";
+
+    // Use OnInitializedAsync to load posts when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadPosts();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private void OpenSpecificPost(int id)
+    {
+        Console.WriteLine($"Navigating to SpecificPost/{id}");
+        Navigation.NavigateTo($"SpecificPost/{id}");
+    }
+
+    private async Task LoadPosts()
+    {
+        posts = await postService.GetAsync(null, null, null);
+    }
+
+*@
 }

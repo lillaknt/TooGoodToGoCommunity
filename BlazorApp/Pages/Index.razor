@@ -1,37 +1,33 @@
 @page "/"
 @inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<AuthorizeView>
-    <NotAuthorized>
-
-        <h1>Test Website: Too Good To Go - Community</h1>
-        <RadzenButton Text="Create User" Click=@NavigateToCreateUser />
-        <button @onclick="NavigateToCreateUser" class="btn btn-primary">Create User</button>
-        <button @onclick="NavigateToLogin" class="btn btn-primary">Login</button>
-    </NotAuthorized>
-    <Authorized>
-
-        <div class="card">
-            <h3>Hello, @context.User.Identity.Name</h3>
-            <p>Welcome to Too Good To Go - Community</p>
+     
+                    
+<div class="container">
+                
+ 
+                
+    <h1>Let 's share more, and waste less.</h1>
+       <div class="imgcontainer">
+            <img src="/images/TGTGCommunity-logo.png" alt="logo" class="avatar">
         </div>
-    </Authorized>
-</AuthorizeView>
+    <button @onclick="NavigateToCreateUser" class="button-primary">Create User</button>
+    <button @onclick="NavigateToLogin" class="button-primary">Login</button>
+
+</div>
 
 
 @code {
 
     private void NavigateToCreateUser()
     {
-    // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/CreateUser");
     }
-
+    
     private void NavigateToLogin()
     {
-    // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/Login");
     }
 

@@ -3,33 +3,39 @@
 @using HttpClients.ClientInterfaces
 @inject IPostService postService
 @inject NavigationManager Navigation
+@inject Random random
+<PageTitle>View Posts</PageTitle>
 
-
-<div>
-    <h3>View Posts</h3>
-    @if (posts != null)
-    {
-        <ul>
-            @foreach (var item in posts)
-            {
-                <div class="postCard" @onclick="() => OpenSpecificPost(item.Id)">
-
-                    <p id="TitlePost">@item.Title</p>
-                    @if (item.ImageData != null && item.ImageData.Length > 0)
-                    {
-                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" alt="Post Image"
-                             width="150"/>
-                    }
-                    <p id="PricePost">@item.Price</p>
-
-
-                </div>
-            }
-
-        </ul>
-    }
+<div class="top-bar-nav">
+    <TopBar Title="Discover" />
 </div>
 
+@if (posts != null)
+{
+    <div class="scroll-container">
+        @foreach (var item in posts)
+        {
+            var (postRandomDateTime, postRandomDistance) = postRandomValues[item.Id];
+
+<div class="postCard" @onclick="() => OpenSpecificPost(item.Id, postRandomDateTime, postRandomDistance)">
+                @if (item.ImageData != null && item.ImageData.Length > 0)
+                {
+                    <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" alt="Post Image" class="card-image" />
+                }
+                <div class="card-details">
+                    <div class="title-section">
+                        <p class="card-title">@item.Title</p>
+                        <p class="card-date">@postRandomDateTime</p>
+                    </div>
+                    <div class="info-section">
+                        <p class="card-distance">@postRandomDistance</p>
+                        <p class="card-price">@item.Price kr.</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
 
 @if (!string.IsNullOrEmpty(msg))
 {
@@ -40,11 +46,15 @@
     private IEnumerable<Post>? posts;
     private string msg = "";
 
+    // Dictionary to store random values for each post
+    private Dictionary<int, (string date, string distance)> postRandomValues = new Dictionary<int, (string date, string distance)>();
+
     // Use OnInitializedAsync to load posts when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            // Load posts and generate random values for each post
             await LoadPosts();
         }
         catch (Exception e)
@@ -54,14 +64,49 @@
         }
     }
 
-    private void OpenSpecificPost(int id)
+    private void OpenSpecificPost(int id, string date, string distance)
     {
-        Navigation.NavigateTo($"SpecificPost/{id}");
+        Navigation.NavigateTo($"SpecificPost/{id}?date={date}&distance={distance}");
     }
 
     private async Task LoadPosts()
     {
         posts = await postService.GetAsync(null, null, null);
+
+        // Generate random values for each post and store in the dictionary
+        foreach (var item in posts)
+        {
+            var postRandomDateTime = GenerateRandomDateTime();
+            var postRandomDistance = GenerateRandomDistance();
+            postRandomValues[item.Id] = (postRandomDateTime, postRandomDistance);
+        }
     }
 
+    private string GenerateRandomDateTime()
+    {
+        // Generate a random number of days between 0 and 5
+        var randomDays = random.Next(0, 6);
+
+        // Generate a random number of minutes between 0 and 1440 (total minutes in a day)
+        var randomMinutes = random.Next(0, 1441);
+
+        // Get the current date and subtract the random number of days
+        var currentDate = DateTime.Now.Date;
+
+        // Combine the random date and time
+        var randomDateTime = currentDate.AddDays(-randomDays).AddMinutes(randomMinutes);
+
+        // Format the date and time to a user-friendly string
+        var formattedDateTime = randomDateTime.ToString("MM/dd/yyyy" + " kl.HH:mm");
+        return formattedDateTime;
+    }
+
+    private string GenerateRandomDistance()
+    {
+        // Generate a random distance between 1 and 10 kilometers
+        var randomDistance = random.Next(1, 11) + random.NextDouble();
+        // Format the distance string
+        var distanceString = $"{randomDistance:F1} km away";
+        return distanceString;
+    }
 }
