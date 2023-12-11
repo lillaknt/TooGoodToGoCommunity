@@ -1,4 +1,3 @@
-@using BlazorApp.Pages
 @inject NavigationManager NavigationManager
 
 <button class="footer__nav-btn" @onclick="NavigateToDiscover">
@@ -9,9 +8,9 @@
     <span class="icon oi oi-plus" aria-hidden="true"></span>
     <span>Add</span>
 </button>
-<button class="footer__nav-btn" @onclick="NavigateToForum">
-    <span class="icon oi oi-person" aria-hidden="true"></span>
-    <span>Forum</span>
+<button class="footer__nav-btn" @onclick="NavigateToCommunity">
+    <span class="icon oi oi-people" aria-hidden="true"></span>
+    <span>Connect</span>
 </button>
 
 <button class="footer__nav-btn" @onclick="NavigateToPerson">
@@ -19,23 +18,29 @@
     <span>Profile</span>
 </button>
 
- 
+
+
+
 @code {
-	
-	 private void NavigateToDiscover()
-	 {
-		 NavigationManager.NavigateTo("/ViewPosts");
-	 }
+
+    private void NavigateToDiscover()
+    {
+        NavigationManager.NavigateTo("/ViewPosts");
+    }
+
     private void NavigateToAdd()
     {
         NavigationManager.NavigateTo("/CreatePost");
     }
-    private void NavigateToForum()
+
+    private void NavigateToCommunity()
     {
-        NavigationManager.NavigateTo("/ViewPosts");
+        NavigationManager.NavigateTo("/ForumPage");
     }
+
     private void NavigateToPerson()
     {
         NavigationManager.NavigateTo("/UserProfile");
     }
+
 }

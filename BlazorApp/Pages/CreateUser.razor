@@ -6,7 +6,7 @@
 
 <PageTitle>Create Account</PageTitle>
 <div class="top-bar-nav">
-    <TopBar Title="Join" />
+    <TopBar Title="Join"/>
 </div>
 
 <div class="container">
@@ -14,7 +14,7 @@
     <h3>Join the community!</h3>
     <div class="field">
         <label>Email address</label>
-        <input type="text" class="form-control" @bind="email" @bind:event="oninput" />
+        <input type="text" class="form-control" @bind="email" @bind:event="oninput"/>
     </div>
 
     <div class="field">
@@ -47,7 +47,7 @@
         <button class="button-primary" @onclick="NavigateToLogin">Log in</button>
     </div>
 </div>
- 
+
 
 @code {
     private string email = "";
@@ -76,6 +76,7 @@
             color = "red";
         }
     }
+
     private void ResetForm()
     {
         email = "";
@@ -83,11 +84,11 @@
         password = "";
         postCode = 0;
     }
-    
-     
+
+
     private void NavigateToLogin()
     {
         navMgr.NavigateTo("/Login");
     }
-    
+
 }

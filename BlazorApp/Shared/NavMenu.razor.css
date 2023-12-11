@@ -1,17 +1,17 @@
 .nav-link span {
     color: #00615F;
-    text-decoration-color:#00615F ;
+    text-decoration-color: #00615F;
     padding: 1px;
 }
 
-.nav-icons{
+.nav-icons {
     width: 30px;
     height: 30px;
     fill: var(--almost-white);
 }
 
 @media (min-width: 641px) {
-  
+
 }
 
 

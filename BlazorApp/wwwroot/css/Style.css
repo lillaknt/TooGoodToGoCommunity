@@ -13,6 +13,7 @@ svg {
     height: 30px;
     fill: var(--almostwhite);
 }
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.4;
@@ -27,7 +28,7 @@ html, body {
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    color: #1a1e21 ;
+    color: #1a1e21;
     background-color: white;
 }
 
@@ -213,7 +214,6 @@ a, .btn-link {
     .page {
         flex-direction: row;
     }
-
 
 
     .top-row {

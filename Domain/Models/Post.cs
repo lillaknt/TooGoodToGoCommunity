@@ -34,7 +34,7 @@ public class Post
 
     // Reference to the user who created the post
     public User User { get; set; }
-    
+
     public string Date { get; set; }
     public string Distance { get; set; }
 }

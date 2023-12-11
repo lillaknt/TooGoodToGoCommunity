@@ -7,55 +7,54 @@
 @inject NavigationManager navMgr
 <PageTitle>Create Post</PageTitle>
 <div class="top-bar-nav">
-    <TopBar Title="Add Item" />
+    <TopBar Title="Add Item"/>
 </div>
 
-        <AuthorizeView>
-            <NotAuthorized>
-        
-                <div class="button-container">
-                    Please Login
-                    <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
-                </div>
-                
-            </NotAuthorized>
-            <Authorized>
-                <div class="container">
-                  
-                      <div class="field">
-                            <label>Add images</label>
-                            <InputFile class="ui-fileupload"  OnChange="HandleFileUpload"/> 
-                        </div>
-                    <div class="field">
-                        <label>Title</label>
-                        <input type="text" class="form-control" @bind="postTitle" @bind:event="oninput"/>
-                    </div>
-                
-                
-                    <div class="field">
-                        <label>Description</label>
-                        <input type="text" class="form-control" @bind="postDescription" @bind:event="oninput"/>
-                    </div>
-                
-                    <div class="field">
-                        <label>Price</label>
-                        <input type="text" class="form-control" @bind="postPrice" @bind:event="oninput"/>
-                    </div>
-                    
-                  
-                    
-                
-                    <div class="button-row">
-                        @if (!string.IsNullOrEmpty(msg))
-                        {
-                            <label style="color: red">@msg</label>
-                        }
-                        <button @onclick="Create" class="button-primary">Publish</button>
-                    </div>
-                
-                </div>
-            </Authorized>
-     </AuthorizeView>
+<AuthorizeView>
+    <NotAuthorized>
+
+        <div class=" container button-container">
+             <h2>Create Post</h2>
+            <h6>Please login to add a new post</h6>
+            <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
+        </div>
+
+    </NotAuthorized>
+    <Authorized>
+        <div class="container">
+
+            <div class="field">
+                <label>Add images</label>
+                <InputFile class="ui-fileupload" OnChange="HandleFileUpload"/>
+            </div>
+            <div class="field">
+                <label>Title</label>
+                <input type="text" class="form-control" @bind="postTitle" @bind:event="oninput"/>
+            </div>
+
+
+            <div class="field">
+                <label>Description</label>
+                <input type="text" class="form-control" @bind="postDescription" @bind:event="oninput"/>
+            </div>
+
+            <div class="field">
+                <label>Price</label>
+                <input type="text" class="form-control" @bind="postPrice" @bind:event="oninput"/>
+            </div>
+
+
+            <div class="button-row">
+                @if (!string.IsNullOrEmpty(msg))
+                {
+                    <label style="color: red">@msg</label>
+                }
+                <button @onclick="Create" class="button-primary">Publish</button>
+            </div>
+
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 
 @code {
@@ -138,6 +137,7 @@
             imageData = memoryStream.ToArray();
         }
     }
+
     private void NavigateToLogin()
     {
         navMgr.NavigateTo("/Login");

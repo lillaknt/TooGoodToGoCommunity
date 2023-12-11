@@ -3,16 +3,14 @@
 
 <PageTitle>Home</PageTitle>
 
-     
-                    
+
 <div class="container">
-                
- 
-                
-    <h1>Let 's share more, and waste less.</h1>
-       <div class="imgcontainer">
-            <img src="/images/TGTGCommunity-logo.png" alt="logo" class="avatar">
-        </div>
+
+
+    <h2>Let 's share more, and waste less.</h2>
+    <div class="imgcontainer">
+        <img src="/images/TGTGCommunity-logo.png" alt="logo" class="avatar">
+    </div>
     <button @onclick="NavigateToCreateUser" class="button-primary">Create User</button>
     <button @onclick="NavigateToLogin" class="button-primary">Login</button>
 
@@ -25,7 +23,7 @@
     {
         NavigationManager.NavigateTo("/CreateUser");
     }
-    
+
     private void NavigateToLogin()
     {
         NavigationManager.NavigateTo("/Login");
