@@ -6,22 +6,22 @@ namespace TestProject1;
 
 public class InMemoryPostDao : IPostDao
 {
-    private readonly List<Post> posts = new List<Post>();
+    private readonly List<Post> _posts = new();
 
     public Task<Post> CreateAsync(Post post)
     {
-        posts.Add(post);
+        _posts.Add(post);
         return Task.FromResult(post);
     }
 
     public Task<IEnumerable<Post>> GetAllPostsAsync()
     {
-        return Task.FromResult(posts.AsEnumerable());
+        return Task.FromResult(_posts.AsEnumerable());
     }
 
     public Task<IEnumerable<Post>> GetAsync(SearchPostParametersDto searchParameters)
     {
-        IEnumerable<Post> filteredPosts = posts;
+        IEnumerable<Post> filteredPosts = _posts;
 
         if (searchParameters.Id.HasValue)
         {
@@ -40,30 +40,33 @@ public class InMemoryPostDao : IPostDao
 
     public Task<Post?> GetPostByIdAsync(int postId)
     {
-        var post = posts.FirstOrDefault(p => p.Id == postId);
+        var post = _posts.FirstOrDefault(p => p.Id == postId);
         return Task.FromResult(post);
     }
 
     public Task UpdateAsync(Post post)
     {
-        // Assume updating means replacing the existing post with the new one
-        var existingPost = posts.FirstOrDefault(p => p.Id == post.Id);
+        // Replacing the existing post with the new one
+        var existingPost = _posts.FirstOrDefault(p => p.Id == post.Id);
 
         if (existingPost != null)
         {
-            posts.Remove(existingPost);
-            posts.Add(post);
+            _posts.Remove(existingPost);
+            _posts.Add(post);
+            return Task.CompletedTask;
         }
 
-        return Task.CompletedTask;
+        // If the post with the specified ID is not found, throw KeyNotFoundException
+        throw new KeyNotFoundException($"Post with ID {post.Id} not found.");
+
     }
 
     public Task DeleteAsync(int postId)
     {
-        var postToRemove = posts.FirstOrDefault(p => p.Id == postId);
+        var postToRemove = _posts.FirstOrDefault(p => p.Id == postId);
         if (postToRemove != null)
         {
-            posts.Remove(postToRemove);
+            _posts.Remove(postToRemove);
         }
 
         return Task.CompletedTask;

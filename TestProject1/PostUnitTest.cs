@@ -1,9 +1,7 @@
-using System.Net;
 using System.Text;
 using Application.Logic;
 using Domain.DTOs;
 using Domain.Models;
-using HttpClients.Implementations;
 
 namespace TestProject1;
 using NUnit.Framework;
