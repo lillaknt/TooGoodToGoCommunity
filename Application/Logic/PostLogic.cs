@@ -102,7 +102,5 @@ namespace Application.Logic
 
             await postDao.DeleteAsync(id);
         }
-
-
     }
 }

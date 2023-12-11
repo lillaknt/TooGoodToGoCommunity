@@ -36,7 +36,7 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    private static void ValidateData(UserCreationDto userToCreate) 
+    public static void ValidateData(UserCreationDto userToCreate) 
     {
         string email = userToCreate.Email;
         string firstName = userToCreate.FirstName;
