@@ -16,7 +16,9 @@ public class PostUnitTest
         string description = "This is a test post.";
         decimal price = 99.99m;
         byte[] imageData = { 1, 2, 3 };
-        var user = new User(1, "user@example.com", "John", "password", 12345);
+        
+        
+        var user = new User(1, "user@example.com", "John", "password", 12345, 1, .45);
 
         // Act
         var post = new Post(title, description, price, imageData, user);
