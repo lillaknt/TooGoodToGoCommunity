@@ -1,0 +1,46 @@
+@inject NavigationManager NavigationManager
+
+<button class="footer__nav-btn" @onclick="NavigateToDiscover">
+    <span class="icon oi oi-compass" aria-hidden="true"></span>
+    <span>Discover</span>
+</button>
+<button class="footer__nav-btn" @onclick="NavigateToAdd">
+    <span class="icon oi oi-plus" aria-hidden="true"></span>
+    <span>Add</span>
+</button>
+<button class="footer__nav-btn" @onclick="NavigateToCommunity">
+    <span class="icon oi oi-people" aria-hidden="true"></span>
+    <span>Connect</span>
+</button>
+
+<button class="footer__nav-btn" @onclick="NavigateToPerson">
+    <span class="icon oi oi-person" aria-hidden="true"></span>
+    <span>Profile</span>
+</button>
+
+
+
+
+@code {
+
+    private void NavigateToDiscover()
+    {
+        NavigationManager.NavigateTo("/ViewPosts");
+    }
+
+    private void NavigateToAdd()
+    {
+        NavigationManager.NavigateTo("/CreatePost");
+    }
+
+    private void NavigateToCommunity()
+    {
+        NavigationManager.NavigateTo("/ForumPage");
+    }
+
+    private void NavigateToPerson()
+    {
+        NavigationManager.NavigateTo("/UserProfile");
+    }
+
+}

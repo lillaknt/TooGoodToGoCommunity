@@ -4,27 +4,22 @@
 @using HttpClients.ClientInterfaces
 @inject NavigationManager NavigationManager
 @inject IUserService UserService
-
 @inject AuthenticationStateProvider AuthenticationStateProvider
-<PageTitle>Index</PageTitle>
 
-<AuthorizeView>
-    <NotAuthorized>
+<PageTitle>Home</PageTitle>
 
-        <h1>Test Website: Too Good To Go - Community</h1>
-        <RadzenButton Text="Create User" Click=@NavigateToCreateUser />
-        <button @onclick="NavigateToCreateUser" class="btn btn-primary">Create User</button>
-        <button @onclick="NavigateToLogin" class="btn btn-primary">Login</button>
-    </NotAuthorized>
-    <Authorized>
-@if (user != null){
-    <div class="card">
-        <h3>Hello, @user.FirstName</h3>
-        <p>Welcome to Too Good To Go - Community</p>
+
+<div class="container">
+
+
+    <h2>Let 's share more, and waste less.</h2>
+    <div class="imgcontainer">
+        <img src="/images/TGTGCommunity-logo.png" alt="logo" class="avatar">
     </div>
-}
-    </Authorized>
-</AuthorizeView>
+    <button @onclick="NavigateToCreateUser" class="button-primary">Create User</button>
+    <button @onclick="NavigateToLogin" class="button-primary">Login</button>
+
+</div>
 
 
 @code {
@@ -32,6 +27,8 @@
     private User user;
     private string email; // Declare email as a field
     protected override async Task OnInitializedAsync()
+    
+    
     {
     // Access the user's email from the authentication state
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

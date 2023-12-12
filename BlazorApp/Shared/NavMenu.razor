@@ -1,16 +1,18 @@
-﻿<div class="nav-item px-3">
-    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+﻿<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+    <div style="display: flex; flex-direction: column; align-items: center;">
         <span class="oi oi-home" aria-hidden="true"></span> Home
-    </NavLink>
-</div>
+    </div>
+</NavLink>
+
 
 @foreach (var link in GetNavigationLinks())
 {
-    <div class="nav-item px-3">
-        <NavLink class="nav-link" href="@link.Url">
-            <span class="@link.IconClass" aria-hidden="true"></span> @link.Text
-        </NavLink>
-    </div>
+    <NavLink class="nav-link" href="@link.Url">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <span class="nav-icons @link.IconClass" aria-hidden="true"></span>
+            <span>@link.Text</span>
+        </div>
+    </NavLink>
 }
 
 @code {

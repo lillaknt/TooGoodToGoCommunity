@@ -1,6 +1,7 @@
 @page "/SpecificPost/{postId:int}"
 @using Domain.Models
 @using HttpClients.ClientInterfaces
+@using Microsoft.AspNetCore.WebUtilities
 @using Domain.DTOs
 @using System.Security.Claims
 @inject IPostService postService
@@ -8,38 +9,69 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
-<h3>SpecificPost</h3>
 
-<AuthorizeView>
-    <NotAuthorized></NotAuthorized>
-    <Authorized>
-        @if (post != null)
-        {
-            <p id="TitlePost">Title: @post.Title</p>
-            <p id="DescriptionPost">Post Description: @post.Description</p>
-            <p id="PricePost">Price: @post.Price kr.</p>
-            <p id="UserId">User ID: @post.User.Id</p>
+<PageTitle>Specific Post</PageTitle>
 
-            @if (post.ImageData != null && post.ImageData.Length > 0)
-            {
-                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150"/>
-            }
+@if (post != null)
+{
+    <div class="top-bar-nav">
+        <TopBar Title=@post.Title/>
+    </div>
 
-            <div class="button-container">
-                @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
-                {
-                    <button class="buttons" @onclick="() => EditButton(postId)">Edit</button>
-                    <button class="buttons" @onclick="() => RemoveTodo(postId)">Delete</button>
-                }
-                else
-                {
-                    <button class="buttons" @onclick= "BuyButton">Buy</button>
-                   
-                }
+
+    <section class="scroll-container">
+        <div class="postCard">
+            <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" class="card-image"/>
+            <div class="card-details">
+                <div class="title-section">
+                    <p class="card-title">@post.Title</p>
+                    @if (!string.IsNullOrEmpty(date))
+                    {
+                        <p class="card-date">@date</p>
+                    }
+                </div>
+                <div class="info-section">
+                    @if (!string.IsNullOrEmpty(distance))
+                    {
+                        <p class="pard-distance">@distance</p>
+                    }
+                    <p class="card-price">@post.Price kr.</p>
+
+
+                </div>
+
+                <p class="card-description">@post.Description</p>
             </div>
-        }
-    </Authorized>
-</AuthorizeView>
+        </div>
+        <AuthorizeView>
+            <NotAuthorized>
+
+                <div class="button-container">
+                    <h6>Please login to buy item</h6>
+                    <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
+                </div>
+
+            </NotAuthorized>
+            <Authorized>
+
+         <div class="button-container">
+                    @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
+                    {
+                        <button class="button-primary" @onclick="() => EditButton(postId)">Edit</button>
+                        <button class="button-primary" @onclick="() => RemoveTodo(postId)">Delete</button>
+                    }
+                    else
+                    {
+                        <button class="button-primary" @onclick="BuyButton">Buy</button>
+                    }
+                </div>
+
+
+            </Authorized>
+        </AuthorizeView>
+
+    </section>
+}
 
 @code {
 
@@ -56,6 +88,8 @@
     private Post post;
     private IEnumerable<Post> posts;
     private string msg = "";
+    private string date;
+    private string distance;
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,6 +103,13 @@
             var idDto = new GetPostIdDto();
             idDto.SetId(postId);
             await GetPostAsync(idDto);
+    // Retrieve date and distance from query parameters
+            var uri = new Uri(Navigation.Uri);
+            var queryParams = QueryHelpers.ParseQuery(uri.Query);
+            date = queryParams["date"];
+            distance = queryParams["distance"];
+
+    // Now you can use the 'date' and 'distance' values as needed
             
             var users = await UserService.GetAsync(email);//BUY BUTTON
             user = users.FirstOrDefault(); //BUY BUTTON
@@ -156,6 +197,8 @@
                
                 Navigation.NavigateTo("/UserProfile", forceLoad: true);
 
+   
+
     // Display a success message or perform additional actions
                 Console.WriteLine("Product purchased successfully!");
             }
@@ -165,6 +208,11 @@
     // Handle exceptions
             Console.WriteLine($"Error: {ex.Message}");
         }
+    }
+    
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/Login");
     }
 
 }

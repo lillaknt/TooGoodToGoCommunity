@@ -1,22 +1,15 @@
-﻿@using BlazorApp.Pages
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <LogInButtons/>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
 <RadzenComponents/>
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+
+<div class="app">
+    <main>
+
+        <section>
+            @Body
+        </section>
+    </main>
+    <div class="footer">
+        <BottomNav/>
+    </div>
+</div>

@@ -4,36 +4,42 @@
 @using System.IO
 @inject IPostService postService
 @inject NavigationManager Navigation
+<PageTitle>Edit Post</PageTitle>
+<div class="top-bar-nav">
+    <TopBar Title="Edit Item"/>
+</div>
 
 
-<h3>EditPost</h3>
-
-<div class="card">
+<div class="container">
     @if (dto == null)
     {
         <label>Loading Post data..</label>
     }
     else
     {
-        <div class="form-group field">
-            <label>Title:</label>
-            <input type="text" @bind="dto.Title"/>
+        <h3>EditPost</h3>
+        <div class="field">
+            <label>Add images</label>
+            <InputFile class="ui-fileupload" OnChange="HandleFileChange"/>
         </div>
-        <div class="form-group field">
-            <label>Image:</label>
-            <InputFile OnChange="HandleFileChange"/>
+        <div class="field">
+            <label>Title</label>
+            <input type="text" class="form-control" @bind="dto.Title" @bind:event="oninput"/>
         </div>
-        <div class="form-group field">
-            <label>Description:</label>
-            <input type="text" @bind="dto.Description"/>
+
+
+        <div class="field">
+            <label>Description</label>
+            <input type="text" class="form-control" @bind="dto.Description" @bind:event="oninput"/>
         </div>
-        <div class="form-group field">
-            <label>Price:</label>
-            <input type="text" @bind="dto.Price"/>
+
+        <div class="field">
+            <label>Price</label>
+            <input type="text" class="form-control" @bind="dto.Price" @bind:event="oninput"/>
         </div>
 
         <div class="button-row">
-            <button @onclick="UpdateAsync" class="acceptbtn">Update</button>
+            <button @onclick="UpdateAsync" class="button-primary">Publish</button>
         </div>
     }
 

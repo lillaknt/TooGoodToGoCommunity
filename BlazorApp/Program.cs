@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-//builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped(sp =>
     new HttpClient
     {
@@ -25,7 +24,17 @@ builder.Services.AddScoped<IUserService, UserHttpClient>();
 builder.Services.AddScoped<IPostService, PostHttpClient>();
 builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+
+//Radzen Services 
 builder.Services.AddRadzenComponents();
+builder.Services.AddScoped<TooltipService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<ContextMenuService>();
+
+builder.Services.AddScoped<Random>();
+
+
 builder.Services.AddMudServices();
 //AuthorizationPolicies.AddPolicies(builder.Services);
 

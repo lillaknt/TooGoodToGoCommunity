@@ -7,47 +7,66 @@
 @inject IUserService UserService
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@attribute [Authorize] 
+ 
+@using HttpClients.ClientInterfaces
+@inject NavigationManager navMgr
+@inject IAuthService authService
+
+
 <!-- this page is only displayed when logged in -->
 <!-- this page is an example on how to get our logged in user information when we only need to show it in the HTML -->
+<PageTitle>User Profile</PageTitle>
+<div class="top-bar-nav">
+    <TopBar Title="Account Details"/>
+</div>
+    
+    
 
-<h3>User Profile</h3>
-<p>You can only access this page, if you're logged in. Given that you're seeing this, you're logged in</p>
+<div class="">
+    <h2>User Profile</h2>
+   
+    <AuthorizeView>
+        <Authorized>
+            @if (user != null)
+            {
+                <div class="user-info">
+                    <h3>Hello, @user.FirstName!</h3>
+                    <p>Email: @user.Email </p>
+                    <p>Postal Code: @user.PostCode </p>
+                    <p>Items Purchased: @user.ItemsPurchased</p>
+                    <p>Translates to: @user.CO2Saved CO2 Saved</p>
+                </div>
+            }
 
-<AuthorizeView>
-    <Authorized>
-          @if (user != null)
-              {
-                  <h3>Hello @user.FirstName</h3>
-                  <p>Your email: @user.Email</p>
-                  <p>Your Postal code: @user.PostCode</p>
-                  <p>Items Purchased: @user.ItemsPurchased</p>
-                  <p>Translates to: @user.CO2Saved CO2 Saved</p>
-              }
-        
-       
-        
-        <!-- Add Edit button to toggle the display of input fields -->
-        <button class="btn btn-primary" @onclick="ToggleEdit">Edit Profile</button>
-
-        <!-- Display input fields based on the value of isEditing -->
-        @if (isEditing)
-        {
-            <div>
-                <label>First Name:</label>
-                 <input type="text" class="form-control" @bind="firstName" @bind:event="oninput" />
-
-                <label>Postal Code:</label>
-                <input type="number" class="form-control" @bind="postCode" @bind:event="oninput" />
-
-                <button class="btn btn-success" @onclick="SaveChanges">Save Changes</button>
+            <div class="button-container">
+                
+                <button class="button-primary" @onclick="() => Logout()">Logout</button>
+                <button class="button-primary" @onclick="ToggleEdit">Edit Profile</button>
             </div>
-        }
-    </Authorized>
-    <NotAuthorized>
-        <p>You are not logged in.</p>
-    </NotAuthorized>
-</AuthorizeView>
+            
+
+            <!-- Display input fields based on the value of isEditing -->
+            @if (isEditing)
+            {
+                <div class="user-info">
+                    <label>First Name:</label>
+                    <input type="text" class="form-control" @bind="firstName" @bind:event="oninput"/>
+
+                    <label>Postal Code:</label>
+                    <input type="number" class="form-control" @bind="postCode" @bind:event="oninput"/>
+
+                    <button class="button-primary" @onclick="SaveChanges">Save Changes</button>
+                </div>
+            }
+        </Authorized>
+        <NotAuthorized>
+            <div class="button-container">
+                <h6>Please login to access your profile</h6>
+                <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
 
 @code {
 
@@ -112,5 +131,17 @@
     {
         firstName = "";
         postCode = 0;
+    }
+    
+    
+    private void NavigateToLogin()
+    {
+        navMgr.NavigateTo("/Login");
+    }
+    
+    private async Task Logout()
+    {
+        await authService.LogoutAsync();
+        navMgr.NavigateTo("/");
     }
 }
