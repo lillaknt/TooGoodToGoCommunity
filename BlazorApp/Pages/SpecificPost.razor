@@ -5,8 +5,11 @@
 @using Domain.DTOs
 @using System.Security.Claims
 @inject IPostService postService
+@inject IUserService UserService
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<h3>SpecificPost</h3>
 <PageTitle>Specific Post</PageTitle>
 
 @if (post != null)
@@ -51,6 +54,10 @@
             </NotAuthorized>
             <Authorized>
 
+            @if (post.ImageData != null && post.ImageData.Length > 0)
+            {
+                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150"/>
+            }
 
                 <div class="button-container">
                     @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
@@ -60,7 +67,7 @@
                     }
                     else
                     {
-                        <button class="button-primary" @onclick="() => EditButton(postId)">Buy</button>
+                        <button class="button-primary" @onclick="BuyButton">Buy</button>
                     }
                 </div>
 
@@ -81,7 +88,8 @@
 
     private string? id;
     private bool isLoggedIn;
-
+    private User user;//BUY BUTTON
+    private string email; //BUY BUTTON
     private Post post;
     private IEnumerable<Post> posts;
     private string msg = "";
@@ -90,9 +98,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync(); //BUY BUTTON
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
         await UpdateAuthenticationState();
+        
         try
         {
+            
             var idDto = new GetPostIdDto();
             idDto.SetId(postId);
             await GetPostAsync(idDto);
@@ -103,13 +115,15 @@
             distance = queryParams["distance"];
 
     // Now you can use the 'date' and 'distance' values as needed
+            
+            var users = await UserService.GetAsync(email);//BUY BUTTON
+            user = users.FirstOrDefault(); //BUY BUTTON
         }
         catch (Exception ex)
         {
             LogException(ex);
         }
     }
-
 
     private async Task UpdateAuthenticationState()
     {
@@ -120,6 +134,7 @@
         if (isLoggedIn)
         {
             id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
         }
     }
 
@@ -171,10 +186,36 @@
     // Log exception details using your preferred logging mechanism
         Console.WriteLine(ex);
     }
+    
+    private async Task BuyButton()
+    {
+        try
+        {
+    // Check if the user is authenticated
+            if (isLoggedIn)
+            {
+    // Update the user's profile to add one to ItemsPurchased
+                await UserService.UpdateUserAsync(new UserUpdateDto { Email = email,
+                    ItemsPurchased = (user.ItemsPurchased ?? 0) + 1,
+                    CO2Saved = Math.Round(((user.ItemsPurchased ?? 0) + 1) * 0.05, 2)});
+                
+               
+                Navigation.NavigateTo("/UserProfile", forceLoad: true);
 
     private void NavigateToLogin()
     {
         Navigation.NavigateTo("/Login");
+    }
+
+    // Display a success message or perform additional actions
+                Console.WriteLine("Product purchased successfully!");
+            }
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 
 }

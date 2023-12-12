@@ -17,34 +17,51 @@ public class UserHttpClient : IUserService
 
     public async Task<User> CreateAsync(UserCreationDto dto)
     {
-        var response = await client.PostAsJsonAsync("/user", dto);
-        var result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode) throw new Exception(result);
+        HttpResponseMessage response = await client.PostAsJsonAsync("/user", dto);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
 
-        var user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
+        User user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
         return user;
     }
-
-    public async Task<IEnumerable<User>> GetUsersAsync(string? emailContains = null)
+    
+    public async Task<IEnumerable<User>> GetAsync(string? emailContains = null)
     {
-        var uri = "/user";
-        if (!string.IsNullOrEmpty(emailContains)) uri += $"?email={emailContains}";
-        var response = await client.GetAsync(uri);
-        var result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode) throw new Exception(result);
+        string uri = "/user";
+        if (!string.IsNullOrEmpty(emailContains))
+        {
+            uri += $"?email={emailContains}";
+        }
 
-        var users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
+        HttpResponseMessage response = await client.GetAsync(uri);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        IEnumerable<User> users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
         return users;
     }
 
-    public Task<User> GetByIdAsync(int id)
+    public async Task UpdateUserAsync(UserUpdateDto dto)
     {
-        throw new NotImplementedException();
+        HttpResponseMessage response = await client.PatchAsJsonAsync("/user", dto);
+    
+        if (!response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            throw new Exception(result);
+        }
     }
-}
+
+    }

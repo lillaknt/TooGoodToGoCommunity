@@ -1,5 +1,13 @@
 @page "/UserProfile"
+@using System.Net.Http;
 @using System.Security.Claims
+@using Domain.DTOs
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IUserService UserService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize] 
 @using HttpClients.ClientInterfaces
 @inject NavigationManager navMgr
 @inject IAuthService authService
@@ -21,12 +29,32 @@
                    <h3>Hello, @context.User.Identity.Name!</h3>
                    <p>Email: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Email)).Value</p>
                    <p>Postal Code: @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.PostalCode)).Value</p>
-               </div>
+  <p>Items Purchased: @user.ItemsPurchased</p>
+                  <p>Translates to: @user.CO2Saved CO2 Saved</p>               
+</div>
    
                <div class="button-container">
                    <button class="button-primary" @onclick="() => NavigateToLogin()">Edit</button>
                    <button class="button-primary" @onclick="() => Logout()">Logout</button>
                </div>
+
+
+  <!-- Add Edit button to toggle the display of input fields -->
+        <button class="btn btn-primary" @onclick="ToggleEdit">Edit Profile</button>
+
+        <!-- Display input fields based on the value of isEditing -->
+        @if (isEditing)
+        {
+            <div>
+                <label>First Name:</label>
+                 <input type="text" class="form-control" @bind="firstName" @bind:event="oninput" />
+
+                <label>Postal Code:</label>
+                <input type="number" class="form-control" @bind="postCode" @bind:event="oninput" />
+
+                <button class="btn btn-success" @onclick="SaveChanges">Save Changes</button>
+            </div>
+        }
            </Authorized>
            <NotAuthorized>
                <div class="button-container">
@@ -38,6 +66,69 @@
    </div>
 
 @code {
+
+    private User user;
+    private string email; // Declare email as a field
+
+    private PostUpdateDto dto = null!;
+    private bool isEditing = false;
+    private string firstName = "";
+    private int postCode = 0;
+    private string resultMsg = "";
+    private string color = "";
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+
+        try
+        {
+    // Retrieve user details using the GetAsync method
+            var users = await UserService.GetAsync(email);
+            user = users.FirstOrDefault(); // Assuming you're expecting a single user
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void ToggleEdit()
+    {
+        isEditing = !isEditing;
+    }
+
+    private async Task SaveChanges()
+    {
+        resultMsg = "";
+
+        try
+        {
+    // Use the declared email field
+            await UserService.UpdateUserAsync(new UserUpdateDto { Email = email, FirstName = firstName, PostCode = postCode });
+            Console.WriteLine($"Retrieved name: {firstName}");
+            resultMsg = "User successfully updated";
+            color = "green";
+            ResetForm();
+            Navigation.NavigateTo("/UserProfile", forceLoad: true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+    }
+
+    private void ResetForm()
+    {
+        firstName = "";
+        postCode = 0;
+    }
     private void NavigateToLogin()
     {
         navMgr.NavigateTo("/Login");

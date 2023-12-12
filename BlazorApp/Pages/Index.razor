@@ -1,5 +1,9 @@
 @page "/"
+@using System.Security.Claims
+@using Domain.Models
+@using HttpClients.ClientInterfaces
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
 
 <PageTitle>Home</PageTitle>
 
@@ -18,14 +22,38 @@
 
 
 @code {
+    
+    private User user;
+    private string email; // Declare email as a field
+    protected override async Task OnInitializedAsync()
+    {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+
+        try
+        {
+    // Retrieve user details using the GetAsync method
+            var users = await UserService.GetAsync(email);
+            user = users.FirstOrDefault(); // Assuming you're expecting a single user
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 
     private void NavigateToCreateUser()
     {
+    // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/CreateUser");
     }
 
     private void NavigateToLogin()
     {
+    // Use NavigationManager to navigate to the CreateUser page
         NavigationManager.NavigateTo("/Login");
     }
 
