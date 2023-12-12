@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Models;
 
+/// Represents the post entity in the application
+
 public class Post
 {
     public int Id { get; set; }
@@ -23,6 +25,7 @@ public class Post
     public string Date { get; set; }
     public string Distance { get; set; }
     
+    /// Initializes a new instance of the Post class
     public Post(string title, string? description, decimal? price, byte[]? imageData, User userid)
     {
         Title = title;
@@ -31,7 +34,6 @@ public class Post
         ImageData = imageData;
         User = userid;
     }
-    
     // Parameterless constructor for serialization purposes
     public Post()
     {

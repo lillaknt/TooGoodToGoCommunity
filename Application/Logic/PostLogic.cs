@@ -8,7 +8,9 @@ using Domain.DTOs;
 using Domain.Models;
 
 namespace Application.Logic
-{
+{ 
+    /// Implements the business logic operations related to posts.
+
     public class PostLogic : IPostLogic
     {
         private readonly IPostDao postDao;
@@ -25,6 +27,7 @@ namespace Application.Logic
             {
                 throw new ArgumentNullException(nameof(dto), "Post creation DTO cannot be null.");
             }
+            // Create a new post using the provided DTO
 
             var newPost = new Post
             {
@@ -44,15 +47,11 @@ namespace Application.Logic
             // Implement logic to get all posts
             return await postDao.GetAllPostsAsync() ?? Enumerable.Empty<Post>();
         }
+        // Implement logic to get all posts
 
         public async Task<IEnumerable<Post>> GetAsync(SearchPostParametersDto searchParameters)
         {
             return await postDao.GetAsync(searchParameters);
-        }
-
-        public async Task<Post?> GetPostById(int postId)
-        {
-            return await postDao.GetPostByIdAsync(postId);
         }
 
         public async Task UpdateAsync(PostUpdateDto updateDto)
@@ -82,7 +81,7 @@ namespace Application.Logic
             // Save the updated post
             await postDao.UpdateAsync(updated);
         }
-
+        // Retrieve the post by ID from the DAO
         public async Task<Post?> GetPostByIdAsync(int postId)
         {
             Post? post = await postDao.GetPostByIdAsync(postId);
@@ -91,6 +90,7 @@ namespace Application.Logic
                 throw new Exception($"Post with ID {postId} not found.");
 
             }
+            // Return a new instance of the post to avoid external modification
 
             return new Post(post.Title, post.Description, post.Price, post.ImageData, new User { Id = post.User.Id });
         }
@@ -104,7 +104,7 @@ namespace Application.Logic
                 throw new Exception($"Post with ID {id} not found.");
             }
 
-
+// Delete the post using the DAO
             await postDao.DeleteAsync(id);
         }
 

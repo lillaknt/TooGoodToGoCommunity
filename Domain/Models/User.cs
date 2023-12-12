@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Models;
-
+/// Represents a user entity in the application
 public class User
 {
     public int Id { get; set; }

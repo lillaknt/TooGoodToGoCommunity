@@ -4,7 +4,7 @@ using Domain.DTOs;
 using Domain.Models;
 
 namespace Application.LogicInterfaces;
-
+/// Defines the contract for post-related business logic operations
 public interface IPostLogic
 {
     Task<Post> CreateAsync(PostCreationDto postToCreate);

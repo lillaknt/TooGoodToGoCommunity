@@ -2,15 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Domain.Models;
-
 namespace FileData;
-
+/// Class for accessing data stored in a JSON file
 public class FileContext
 {
     private const string filePath = "data.json";
     private DataContainer? dataContainer;
 
-
+    /// Gets the collection of users stored in the data file
     public ICollection<User> Users
     {
         get
@@ -19,7 +18,7 @@ public class FileContext
             return dataContainer!.Users;
         }
     }
-
+    /// Gets the collection of posts stored in the data file
     public ICollection<Post> Posts
     {
         get
@@ -29,7 +28,7 @@ public class FileContext
         }
     }
 
-
+    /// Loads data from the JSON file into the data container
     private void LoadData()
     {
         if (dataContainer != null) return;
@@ -52,7 +51,7 @@ public class FileContext
 
         if (dataContainer.Posts == null) dataContainer.Posts = new List<Post>();
     }
-
+    /// Saves changes made to the data container back to the JSON file
     public void SaveChanges()
     {
         var serialized = JsonSerializer.Serialize(dataContainer, new JsonSerializerOptions
