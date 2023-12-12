@@ -3,9 +3,20 @@
     {
       "Id": 1,
       "Email": "lillaknt@gmail.com",
-      "FirstName": "Lilla",
+      "FirstName": "jhnhlknld",
       "Password": "Test123",
-      "PostCode": 8000
+      "PostCode": 1234,
+      "ItemsPurchased": 2,
+      "CO2Saved": 0.25
+    },
+    {
+      "Id": 2,
+      "Email": "Test@test.com",
+      "FirstName": "Test",
+      "Password": "Test",
+      "PostCode": 8000,
+      "ItemsPurchased": 0,
+      "CO2Saved": 0
     }
   ],
   "Posts": [
@@ -20,7 +31,9 @@
         "Email": null,
         "FirstName": null,
         "Password": null,
-        "PostCode": null
+        "PostCode": null,
+        "ItemsPurchased": null,
+        "CO2Saved": null
       },
       "Date": null,
       "Distance": null
@@ -36,7 +49,9 @@
         "Email": null,
         "FirstName": null,
         "Password": null,
-        "PostCode": null
+        "PostCode": null,
+        "ItemsPurchased": null,
+        "CO2Saved": null
       },
       "Date": null,
       "Distance": null
@@ -52,7 +67,9 @@
         "Email": null,
         "FirstName": null,
         "Password": null,
-        "PostCode": null
+        "PostCode": null,
+        "ItemsPurchased": null,
+        "CO2Saved": null
       },
       "Date": null,
       "Distance": null
@@ -68,7 +85,9 @@
         "Email": null,
         "FirstName": null,
         "Password": null,
-        "PostCode": null
+        "PostCode": null,
+        "ItemsPurchased": null,
+        "CO2Saved": null
       },
       "Date": null,
       "Distance": null

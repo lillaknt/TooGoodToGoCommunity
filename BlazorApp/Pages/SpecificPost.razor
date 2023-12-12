@@ -9,7 +9,7 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
-<h3>SpecificPost</h3>
+
 <PageTitle>Specific Post</PageTitle>
 
 @if (post != null)
@@ -54,12 +54,7 @@
             </NotAuthorized>
             <Authorized>
 
-            @if (post.ImageData != null && post.ImageData.Length > 0)
-            {
-                <img src="@($"data:image/png;base64,{Convert.ToBase64String(post.ImageData)}")" alt="Post Image" width="200" height="150"/>
-            }
-
-                <div class="button-container">
+         <div class="button-container">
                     @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
                     {
                         <button class="button-primary" @onclick="() => EditButton(postId)">Edit</button>
@@ -202,10 +197,7 @@
                
                 Navigation.NavigateTo("/UserProfile", forceLoad: true);
 
-    private void NavigateToLogin()
-    {
-        Navigation.NavigateTo("/Login");
-    }
+   
 
     // Display a success message or perform additional actions
                 Console.WriteLine("Product purchased successfully!");
@@ -216,6 +208,11 @@
     // Handle exceptions
             Console.WriteLine($"Error: {ex.Message}");
         }
+    }
+    
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/Login");
     }
 
 }

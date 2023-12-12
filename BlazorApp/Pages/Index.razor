@@ -4,6 +4,7 @@
 @using HttpClients.ClientInterfaces
 @inject NavigationManager NavigationManager
 @inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Home</PageTitle>
 
@@ -26,6 +27,8 @@
     private User user;
     private string email; // Declare email as a field
     protected override async Task OnInitializedAsync()
+    
+    
     {
     // Access the user's email from the authentication state
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
