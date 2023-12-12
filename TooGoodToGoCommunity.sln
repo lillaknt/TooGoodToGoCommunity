@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\Blaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{3C9B4DBC-BA63-4C90-8F28-D477ACA9986D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{1B99C46F-C6EC-4C61-AC5F-A353B025E145}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{1B99C46F-C6EC-4C61-AC5F-A353B025E145}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
