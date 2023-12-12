@@ -1,5 +1,4 @@
 @page "/UserProfile"
-@using System.Net.Http;
 @using System.Security.Claims
 @using Domain.DTOs
 @using Domain.Models
@@ -7,9 +6,6 @@
 @inject IUserService UserService
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
- 
-@using HttpClients.ClientInterfaces
-@inject NavigationManager navMgr
 @inject IAuthService authService
 
 
@@ -17,13 +13,10 @@
 <!-- this page is an example on how to get our logged in user information when we only need to show it in the HTML -->
 <PageTitle>User Profile</PageTitle>
 <div class="top-bar-nav">
-    <TopBar Title="Account Details"/>
+    <TopBar Title="My Details"/>
 </div>
-    
-    
 
-<div class="">
-    <h2>User Profile</h2>
+<div class="container">
    
     <AuthorizeView>
         <Authorized>
@@ -40,8 +33,10 @@
 
             <div class="button-container">
                 
-                <button class="button-primary" @onclick="() => Logout()">Logout</button>
+                
                 <button class="button-primary" @onclick="ToggleEdit">Edit Profile</button>
+                 <button class="button-primary" @onclick="() => NavigateToImpact()">My Impact</button>
+                <button class="button-primary" @onclick="() => Logout()">Logout</button>
             </div>
             
 
@@ -61,6 +56,8 @@
         </Authorized>
         <NotAuthorized>
             <div class="button-container">
+                <h2> </h2>
+                <h2> </h2>
                 <h6>Please login to access your profile</h6>
                 <button class="button-primary" @onclick="() => NavigateToLogin()">Login</button>
             </div>
@@ -135,12 +132,18 @@
     
     private void NavigateToLogin()
     {
-        navMgr.NavigateTo("/Login");
+        Navigation.NavigateTo("/Login");
     }
     
     private async Task Logout()
     {
         await authService.LogoutAsync();
-        navMgr.NavigateTo("/");
+        Navigation.NavigateTo("/");
+    }
+    
+    
+    private void NavigateToImpact()
+    {
+        Navigation.NavigateTo("/PersonalImpact");
     }
 }

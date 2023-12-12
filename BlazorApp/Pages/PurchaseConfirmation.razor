@@ -1,75 +1,61 @@
 @page "/PurchaseConfirmation"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using System.Security.Claims
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserService UserService
 <PageTitle>Order Confirmation</PageTitle>
 <div class="top-bar-nav">
     <TopBar Title="Success"/>
 </div>
 
+<div class="button-container">
+    
+     <div class="imgcontainer">
+            <img src="/images/TGTGCommunity-logo.png" alt="logo" class="avatar">
+        </div>
+    <h6>Thank you for saving the planet together one meal at a time!</h6>
+    <p>Check out your total impact on your profile:</p>
+    <button class="button-primary" @onclick="NavigateToPerson">My Profile</button>
+    <button class="button-primary" @onclick="NavigateToImpact">My impact</button>
+</div>
 
-@*
-@page "/ViewPosts"
-@using Domain.Models
-@using HttpClients.ClientInterfaces
-@using Orientation = Radzen.Orientation
-@inject IPostService postService
-@inject NavigationManager Navigation
 
-<PageTitle>Discover</PageTitle>
-
-@if (posts != null)
+@code
 {
-    @foreach (var item in posts)
-    { 
-                
-        <RadzenCard @onclick="() => OpenSpecificPost(item.Id)">
-            <RadzenStack JustifyContent="JustifyContent.Start" Gap="0.5rem" Class="rz-p-4">
-                @if (item.ImageData != null && item.ImageData.Length > 0)
-                {
-                    <RadzenImage Path="@($"data:image/png;base64,{Convert.ToBase64String(item.ImageData)}")" Style="max-width: 20vh; height: auto; display: flex; vertical-align: middle"/>
-                }
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0" Style="font-weight: normal; font-size: 12px"><b>@item.Title</b></RadzenText>
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0" Style="font-weight: normal; font-size: 12px"><b>Price: @item.Price kr.</b></RadzenText>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-                 
-    }
-           
-        
-}
-@if (!string.IsNullOrEmpty(msg))
-{
-    <label style="color: red">@msg</label>
-}
-
-@code {
-    private IEnumerable<Post>? posts;
-    private string msg = "";
-
-    // Use OnInitializedAsync to load posts when the component is initialized
+    private User user;
+    private string email; // Declare email as a field
+    
+    
     protected override async Task OnInitializedAsync()
     {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+
         try
         {
-            await LoadPosts();
+    // Retrieve user details using the GetAsync method
+            var users = await UserService.GetAsync(email);
+            user = users.FirstOrDefault(); // Assuming you're expecting a single user
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            msg = e.Message;
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
-
-    private void OpenSpecificPost(int id)
+    
+    private void NavigateToImpact()
     {
-        Console.WriteLine($"Navigating to SpecificPost/{id}");
-        Navigation.NavigateTo($"SpecificPost/{id}");
+        NavigationManager.NavigateTo("/PersonalImpact");
     }
-
-    private async Task LoadPosts()
+    
+    private void NavigateToPerson()
     {
-        posts = await postService.GetAsync(null, null, null);
+        NavigationManager.NavigateTo("/UserProfile");
     }
-
-*@
+    
+  
 }

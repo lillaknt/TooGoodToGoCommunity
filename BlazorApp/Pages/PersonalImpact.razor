@@ -1,0 +1,118 @@
+@page "/PersonalImpact"
+@using System.Security.Claims
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+<PageTitle>Personal Impact</PageTitle>
+<div class="top-bar-nav">
+    <TopBar Title="My Impact"/>
+</div>
+
+
+@if (user != null)
+{
+    <div class="container">
+        <div class="user-info">
+            <h3>Hello, @user.FirstName!</h3>
+        </div>
+        <div class="main__stat-blocks">
+            <div class="main__stat-block main__stat-block--lg">
+                <div class="main__stat-graph main__stat-graph--filled">
+                    <svg class="ring" viewBox="0 0 180 180" height="180" width="180" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="ring-track" cx="90" cy="90" r="82" fill="none" stroke="#7f7f7f" stroke-width="16"/>
+                        <circle class="ring-stroke ring-stroke--steps" cx="90" cy="90" r="82" fill="none" stroke="#000" stroke-linecap="round" stroke-width="16" stroke-dasharray="515.22 515.22" stroke-dashoffset="0" transform="rotate(-90,90,90)"/>
+                        <circle class="ring-fill" cx="90" cy="90" r="0" fill="none" transform="rotate(-90,90,90)"/>
+                    </svg>
+                    <div class="main__stat-detail">
+                        <svg role="img" aria-label="Footprints" class="icon" viewBox="0 0 36 36" height="36" width="36" xmlns="http://www.w3.org/2000/svg">
+                            <path class="no-fill" fill="none" stroke="#000" stroke-width="2" d="M 14.831 17.296 C 13.365 17.803 12 18.046 10.142 18.623 C 10.87 27.73 19.472 24.186 14.831 17.296 Z M 14.236 15.036 C 14.26 13.771 14.191 12.55 14.74 11.349 C 15.362 10.06 15.461 8.925 15.115 7.054 C 14.493 3.647 13.171 1.521 11.389 1.055 C 7.586 0.499 7.113 4.24 7.022 6.974 C 6.812 8.503 8.106 15.054 9.669 16.162 C 11.205 15.77 12.713 15.386 14.236 15.036 Z"/>
+                            <path class="no-fill" fill="none" stroke="#000" stroke-width="2" d="M 21.184 28.252 C 21.184 28.252 24.001 28.918 25.859 29.496 C 25.128 38.603 16.542 35.143 21.184 28.252 Z M 21.764 26.007 C 21.741 24.741 21.807 23.525 21.261 22.32 C 20.64 21.031 20.541 19.9 20.885 18.026 C 21.508 14.618 22.828 12.495 24.61 12.029 C 28.417 11.471 28.888 15.211 28.977 17.945 C 29.187 19.475 27.897 26.027 26.332 27.135 C 24.799 26.743 23.288 26.357 21.764 26.007 Z"/>
+                        </svg>
+                        <strong class="main__stat-value">@user.CO2Saved kg</strong>
+                        <span class="main__stat-unit">Total CO2e avoided</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <p>Here's what your avoided CO2e equals to:</p>
+        <div class="main__stat-blocks">
+        <div class="main__stat-block">
+
+            <div class="main__stat-graph">
+                <svg class="ring" viewBox="0 0 60 60" height="60" width="60" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="ring-track" cx="30" cy="30" r="26" fill="none" stroke="#7f7f7f" stroke-width="8"/>
+                    <circle class="ring-stroke ring-stroke--cals" cx="30" cy="30" r="26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8" stroke-dasharray="163.36 163.36" stroke-dashoffset="12.25" transform="rotate(-90,30,30)"/>
+                </svg>
+                <svg role="img" aria-label="Flame" class="icon" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path class="no-fill" fill="none" stroke="#000" stroke-width="2" d="M 14.505 1 C 11.546 1.356 10.354 12.419 10.272 12.478 C 10.189 12.538 6.773 6.184 6.773 6.184 C 6.773 6.184 3.855 8.381 4 14 C 4.2 18 5.868 23.067 12.177 22.999 C 18.488 22.932 20.1 18 20 14 C 19.9 10 17.533 10.05 15.964 6.738 C 14.638 3.939 14.505 1 14.505 1 Z"/>
+                </svg>
+            </div>
+            <div class="main__stat-detail">
+                <strong class="main__stat-value">@user.ItemsPurchased</strong>
+                <span class="main__stat-unit">Meals Saved</span>
+            </div>
+        </div>
+        <div class="main__stat-block">
+            <div class="main__stat-graph">
+                <svg class="ring" viewBox="0 0 60 60" height="60" width="60" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="ring-track" cx="30" cy="30" r="26" fill="none" stroke="#7f7f7f" stroke-width="8"/>
+                    <circle class="ring-stroke ring-stroke--miles" cx="30" cy="30" r="26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8" stroke-dasharray="163.36 163.36" stroke-dashoffset="35.39" transform="rotate(-90,30,30)"/>
+                </svg>
+                <svg role="img" aria-label="Location marker" class="icon" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C7.6 2 4 5.6 4 10C4 15.4 11 21.5 11.3 21.8C11.5 21.9 11.8 22 12 22C12.2 22 12.5 21.9 12.7 21.8C13 21.5 20 15.4 20 10C20 5.6 16.4 2 12 2ZM12 19.7C9.9 17.7 6 13.4 6 10C6 6.7 8.7 4 12 4C15.3 4 18 6.7 18 10C18 13.3 14.1 17.7 12 19.7ZM12 6C9.8 6 8 7.8 8 10C8 12.2 9.8 14 12 14C14.2 14 16 12.2 16 10C16 7.8 14.2 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z"/>
+                </svg>
+            </div>
+            <div class="main__stat-detail">
+                <strong class="main__stat-value">4.7 l</strong>
+                <span class="main__stat-unit">Water Saved</span>
+            </div>
+        </div>
+        <div class="main__stat-block">
+            <div class="main__stat-graph">
+                <svg class="ring" viewBox="0 0 60 60" height="60" width="60" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="ring-track" cx="30" cy="30" r="26" fill="none" stroke="#7f7f7f" stroke-width="8"/>
+                    <circle class="ring-stroke ring-stroke--mins" cx="30" cy="30" r="26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8" stroke-dasharray="163.36 163.36" stroke-dashoffset="65.34" transform="rotate(-90,30,30)"/>
+                </svg>
+                <svg role="img" aria-label="Lightning bolt" class="icon" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="14,1 13,9 22,9 11,23 12,15 2,15" fill="none" stroke="#000" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="main__stat-detail">
+                <strong class="main__stat-value">72 kWH</strong>
+                <span class="main__stat-unit">Electricity (European grid)</span>
+            </div>
+        </div>
+    </div>
+   </div>
+}
+
+
+@code {
+
+    private User user;
+    private string email; // Declare email as a field
+
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+
+        try
+        {
+    // Retrieve user details using the GetAsync method
+            var users = await UserService.GetAsync(email);
+            user = users.FirstOrDefault(); // Assuming you're expecting a single user
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+}
