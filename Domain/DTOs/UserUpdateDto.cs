@@ -3,7 +3,7 @@ namespace Domain.DTOs;
 public class UserUpdateDto
 {
     public string Email { get; set; }
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
     
     public int? PostCode { get; set; }
     public int? ItemsPurchased { get; set; }
