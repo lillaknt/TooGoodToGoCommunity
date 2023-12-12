@@ -4,20 +4,7 @@ namespace Domain.DTOs;
 
 public class PostCreationDto
 {
-    public PostCreationDto(string title, string? description, decimal? price, byte[]? imageData, int userId)
-
-    {
-        Title = title;
-        Description = description;
-        Price = price;
-        ImageData = imageData;
-        UserId = userId;
-    }
-
-    public PostCreationDto()
-    {
-    }
-
+    
     [Required(ErrorMessage = "Title is required")]
     public string Title { get; set; }
 
@@ -31,4 +18,17 @@ public class PostCreationDto
 
     // Add a property for the user ID
     public int UserId { get; set; }
+    public PostCreationDto(string title, string? description, decimal? price, byte[]? imageData, int userId)
+
+    {
+        Title = title;
+        Description = description;
+        Price = price;
+        ImageData = imageData;
+        UserId = userId;
+    }
+
+    public PostCreationDto()
+    {
+    }
 }

@@ -64,10 +64,12 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private int userId;
-    //private string? postalCode;
-    //private string? name;
-
     private bool isLoggedIn;
+    private string postTitle = "";
+    private string postDescription = "";
+    private decimal postPrice;
+    private byte[]? imageData;
+    private string msg = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -76,8 +78,6 @@
         isLoggedIn = user.Identity != null;
 
         if (!isLoggedIn) return;
-    //postalCode = user.FindFirst(ClaimTypes.PostalCode)?.Value;
-    // name = user.Identity!.Name!;
 
     //retrieve user ID and convert it to id
         var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
@@ -92,14 +92,6 @@
             msg = "Unable to retrieve user ID from authentication.";
         }
     }
-
-
-    private string postTitle = "";
-    private string postDescription = "";
-    private decimal postPrice;
-    private byte[]? imageData;
-    private string msg = "";
-
 
     private async Task Create()
     {
