@@ -28,7 +28,7 @@ namespace Application.Logic
                 ImageData = dto.ImageData,
                 Description = dto.Description,
                 Price = dto.Price,
-                User =  new User { Id = dto.UserId } // Associate the user with the post
+                User = new User { Id = dto.UserId } // Associate the user with the post
             };
 
             // Save the post using the DAO
@@ -40,20 +40,20 @@ namespace Application.Logic
             // Implement logic to get all posts
             return await postDao.GetAllPostsAsync() ?? Enumerable.Empty<Post>();
         }
-        
+
         public async Task<IEnumerable<Post>> GetAsync(SearchPostParametersDto searchParameters)
         {
             return await postDao.GetAsync(searchParameters);
         }
-        
+
         public async Task<Post?> GetPostById(int postId)
         {
             return await postDao.GetPostByIdAsync(postId);
         }
-        
+
         public async Task UpdateAsync(PostUpdateDto updateDto)
         {
-            
+
 
             Post? existingPost = await postDao.GetPostByIdAsync(updateDto.Id);
 
@@ -66,10 +66,11 @@ namespace Application.Logic
             string titleToUse = updateDto.Title ?? existingPost.Title;
             string descriptionToUse = updateDto.Description ?? existingPost.Description;
             decimal priceToUse = updateDto.Price ?? existingPost.Price ?? 0;
-            
+
             byte[]? imageDataToUse = updateDto.ImageData ?? existingPost.ImageData;
 
-            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse, new User{ Id = existingPost.User.Id })
+            Post updated = new(titleToUse, descriptionToUse, priceToUse, imageDataToUse,
+                new User { Id = existingPost.User.Id })
             {
                 Id = existingPost.Id,
             };
@@ -87,7 +88,7 @@ namespace Application.Logic
 
             }
 
-            return new Post(post.Title, post.Description, post.Price, post.ImageData, new User{ Id = post.User.Id });
+            return new Post(post.Title, post.Description, post.Price, post.ImageData, new User { Id = post.User.Id });
         }
 
         public async Task DeleteAsync(int id)
@@ -98,13 +99,10 @@ namespace Application.Logic
             {
                 throw new Exception($"Post with ID {id} not found.");
             }
-            
 
-        await postDao.DeleteAsync(id);
-    }
 
-    public async Task<Post?> GetPostById(int postId)
-    {
-        return await postDao.GetPostByIdAsync(postId);
+            await postDao.DeleteAsync(id);
+        }
+
     }
 }
