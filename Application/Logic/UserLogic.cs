@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
@@ -27,7 +30,9 @@ public class UserLogic : IUserLogic
             Email = dto.Email,
             Password = dto.Password,
             FirstName = dto.FirstName,
-            PostCode = dto.PostCode
+            PostCode = dto.PostCode,
+            ItemsPurchased = dto.ItemsPurchased,
+            CO2Saved = dto.CO2Saved
             
         };
         
@@ -95,5 +100,34 @@ public class UserLogic : IUserLogic
         
         return Task.CompletedTask;
     }
+    
+   
+    
+    public async Task UpdateUserAsync(UserUpdateDto updateDto)
+    {
+        // Fetch the existing user by email
+        User? existingUser = await userDao.GetByEmailAsync(updateDto.Email);
+
+        if (existingUser == null)
+        {
+            throw new Exception($"User with email {updateDto.Email} not found.");
+        } 
+        // Create a new UserUpdateDto based on existing user
+        UserUpdateDto userUpdateDto = new UserUpdateDto
+        {
+            Email = existingUser.Email,
+            FirstName = updateDto.FirstName ?? existingUser.FirstName,
+            PostCode = updateDto.PostCode ?? existingUser.PostCode,
+            ItemsPurchased = updateDto.ItemsPurchased?? existingUser.ItemsPurchased,
+            CO2Saved = updateDto.CO2Saved ?? existingUser.CO2Saved,
+            
+        };
+
+        // Update the user using the UserUpdateDto
+        await userDao.UpdateUserAsync(userUpdateDto);
+    }
+
+   
+
     
 }

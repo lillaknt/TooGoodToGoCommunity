@@ -4,9 +4,10 @@
 @using Domain.DTOs
 @using System.Security.Claims
 @inject IPostService postService
+@inject IUserService UserService
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <h3>SpecificPost</h3>
 
 <AuthorizeView>
@@ -32,7 +33,8 @@
                 }
                 else
                 {
-                    <button class="buttons" @onclick="() => EditButton(postId)">Buy</button>
+                    <button class="buttons" @onclick= "BuyButton">Buy</button>
+                   
                 }
             </div>
         }
@@ -49,19 +51,27 @@
 
     private string? id;
     private bool isLoggedIn;
-
+    private User user;//BUY BUTTON
+    private string email; //BUY BUTTON
     private Post post;
     private IEnumerable<Post> posts;
     private string msg = "";
 
     protected override async Task OnInitializedAsync()
     {
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync(); //BUY BUTTON
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
         await UpdateAuthenticationState();
+        
         try
         {
+            
             var idDto = new GetPostIdDto();
             idDto.SetId(postId);
             await GetPostAsync(idDto);
+            
+            var users = await UserService.GetAsync(email);//BUY BUTTON
+            user = users.FirstOrDefault(); //BUY BUTTON
         }
         catch (Exception ex)
         {
@@ -78,6 +88,7 @@
         if (isLoggedIn)
         {
             id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
         }
     }
 
@@ -128,6 +139,32 @@
     {
     // Log exception details using your preferred logging mechanism
         Console.WriteLine(ex);
+    }
+    
+    private async Task BuyButton()
+    {
+        try
+        {
+    // Check if the user is authenticated
+            if (isLoggedIn)
+            {
+    // Update the user's profile to add one to ItemsPurchased
+                await UserService.UpdateUserAsync(new UserUpdateDto { Email = email,
+                    ItemsPurchased = (user.ItemsPurchased ?? 0) + 1,
+                    CO2Saved = Math.Round(((user.ItemsPurchased ?? 0) + 1) * 0.05, 2)});
+                
+               
+                Navigation.NavigateTo("/UserProfile", forceLoad: true);
+
+    // Display a success message or perform additional actions
+                Console.WriteLine("Product purchased successfully!");
+            }
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 
 }

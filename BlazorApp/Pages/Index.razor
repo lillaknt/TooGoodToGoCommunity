@@ -1,6 +1,11 @@
 @page "/"
+@using System.Security.Claims
+@using Domain.Models
+@using HttpClients.ClientInterfaces
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <PageTitle>Index</PageTitle>
 
 <AuthorizeView>
@@ -12,16 +17,39 @@
         <button @onclick="NavigateToLogin" class="btn btn-primary">Login</button>
     </NotAuthorized>
     <Authorized>
-
-        <div class="card">
-            <h3>Hello, @context.User.Identity.Name</h3>
-            <p>Welcome to Too Good To Go - Community</p>
-        </div>
+@if (user != null){
+    <div class="card">
+        <h3>Hello, @user.FirstName</h3>
+        <p>Welcome to Too Good To Go - Community</p>
+    </div>
+}
     </Authorized>
 </AuthorizeView>
 
 
 @code {
+    
+    private User user;
+    private string email; // Declare email as a field
+    protected override async Task OnInitializedAsync()
+    {
+    // Access the user's email from the authentication state
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
+
+        try
+        {
+    // Retrieve user details using the GetAsync method
+            var users = await UserService.GetAsync(email);
+            user = users.FirstOrDefault(); // Assuming you're expecting a single user
+        }
+        catch (Exception ex)
+        {
+    // Handle exceptions
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 
     private void NavigateToCreateUser()
     {

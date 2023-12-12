@@ -37,6 +37,10 @@ namespace TestProject1
         {
             throw new NotImplementedException();
         }
-        
+
+        public Task UpdateUserAsync(UserUpdateDto user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
