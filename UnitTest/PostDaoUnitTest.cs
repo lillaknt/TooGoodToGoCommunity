@@ -1,7 +1,7 @@
-namespace TestProject1;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Domain.Models;
 using NUnit.Framework;
+
+namespace TestProject1;
 
 public class PostDaoUnitTest
 {
@@ -15,7 +15,7 @@ public class PostDaoUnitTest
             var postDao = new InMemoryPostDao();
 
             // Seed the in-memory data with a post
-            var initialPost = new Domain.Models.Post
+            var initialPost = new Post
             {
                 Id = 1,
                 Title = "Initial Post",
@@ -27,7 +27,7 @@ public class PostDaoUnitTest
             await postDao.CreateAsync(initialPost);
 
             // Act
-            var updatedPost = new Domain.Models.Post
+            var updatedPost = new Post
             {
                 Id = 1,
                 Title = "Updated Post",
@@ -54,7 +54,7 @@ public class PostDaoUnitTest
             var postDao = new InMemoryPostDao();
 
             // Act and Assert
-            var nonExistingPost = new Domain.Models.Post
+            var nonExistingPost = new Post
             {
                 Id = 1,
                 Title = "Non-Existing Post",

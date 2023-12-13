@@ -31,13 +31,14 @@ h2 {
     margin-top: 3em;
 }
 
-h6{
+h6 {
     font-size: 1.5em;
     font-weight: bold;
     font-variant-caps: all-small-caps;
     color: var(--primary);
     text-align: center;
 }
+
 /* All */
 
 body, button {
@@ -184,7 +185,6 @@ body:after {
 }
 
 
-
 .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
@@ -310,7 +310,7 @@ input[type=text], input[type=password] input[type=number] {
     transform: scale(0.9);
 }
 
-.footer__nav-btn span{
+.footer__nav-btn span {
     margin-top: 5px;
 }
 

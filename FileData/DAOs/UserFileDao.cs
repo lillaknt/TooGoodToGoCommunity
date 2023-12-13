@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Models;
@@ -64,7 +60,7 @@ public class UserFileDao : IUserDao
     public Task UpdateUserAsync(UserUpdateDto dto)
     {
         // Check if the user with the given ID exists in the context
-        User? existingUser = context.Users.FirstOrDefault(u => u.Email == dto.Email);
+        var existingUser = context.Users.FirstOrDefault(u => u.Email == dto.Email);
 
         if (existingUser != null)
         {

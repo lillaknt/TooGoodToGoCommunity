@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
@@ -24,7 +21,11 @@ public class PostController : ControllerBase
     {
         try
         {
+            // Attempt to create a new post
+
             var createdPost = await postLogic.CreateAsync(dto);
+            // Return a 201 Created status with the created post in the response
+
             return Created($"/posts/{createdPost.Id}", createdPost);
         }
         catch (Exception e)
@@ -38,11 +39,15 @@ public class PostController : ControllerBase
     [HttpGet("GetAllPosts")]
     public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync([FromQuery] int? id)
     {
+        // Create a DTO to encapsulate query parameters
+
         var dto = new GetPostIdDto();
         dto.SetId(id);
 
         try
         {
+            // Attempt to retrieve all posts
+
             var posts = await postLogic.GetAllPostsAsync();
             return Ok(posts);
         }

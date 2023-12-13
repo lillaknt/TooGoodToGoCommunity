@@ -6,8 +6,8 @@
       "FirstName": "Lilla",
       "Password": "Test123",
       "PostCode": 8000,
-      "ItemsPurchased": 15,
-      "CO2Saved": 0.75
+      "ItemsPurchased": 20,
+      "CO2Saved": 1
     },
     {
       "Id": 2,

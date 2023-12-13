@@ -1,9 +1,9 @@
 @page "/SpecificPost/{postId:int}"
+@using System.Security.Claims
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @using Microsoft.AspNetCore.WebUtilities
 @using Domain.DTOs
-@using System.Security.Claims
 @inject IPostService postService
 @inject IUserService UserService
 @inject IJSRuntime JsRuntime
@@ -54,7 +54,7 @@
             </NotAuthorized>
             <Authorized>
 
-         <div class="button-container">
+                <div class="button-container">
                     @if (isLoggedIn && post.User != null && post.User.Id.ToString() == id)
                     {
                         <button class="button-primary" @onclick="() => EditButton(postId)">Edit</button>
@@ -83,7 +83,7 @@
 
     private string? id;
     private bool isLoggedIn;
-    private User user;//BUY BUTTON
+    private User user; //BUY BUTTON
     private string email; //BUY BUTTON
     private Post post;
     private IEnumerable<Post> posts;
@@ -96,10 +96,9 @@
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync(); //BUY BUTTON
         email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
         await UpdateAuthenticationState();
-        
+
         try
         {
-            
             var idDto = new GetPostIdDto();
             idDto.SetId(postId);
             await GetPostAsync(idDto);
@@ -110,8 +109,8 @@
             distance = queryParams["distance"];
 
     // Now you can use the 'date' and 'distance' values as needed
-            
-            var users = await UserService.GetAsync(email);//BUY BUTTON
+
+            var users = await UserService.GetAsync(email); //BUY BUTTON
             user = users.FirstOrDefault(); //BUY BUTTON
         }
         catch (Exception ex)
@@ -129,7 +128,6 @@
         if (isLoggedIn)
         {
             id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
         }
     }
 
@@ -181,7 +179,7 @@
     // Log exception details using your preferred logging mechanism
         Console.WriteLine(ex);
     }
-    
+
     private async Task BuyButton()
     {
         try
@@ -190,14 +188,16 @@
             if (isLoggedIn)
             {
     // Update the user's profile to add one to ItemsPurchased
-                await UserService.UpdateUserAsync(new UserUpdateDto { Email = email,
+                await UserService.UpdateUserAsync(new UserUpdateDto
+                {
+                    Email = email,
                     ItemsPurchased = (user.ItemsPurchased ?? 0) + 1,
-                    CO2Saved = Math.Round(((user.ItemsPurchased ?? 0) + 1) * 0.05, 2)});
-                
-               
-                Navigation.NavigateTo("/PurchaseConfirmation", forceLoad: true);
+                    CO2Saved = Math.Round(((user.ItemsPurchased ?? 0) + 1) * 0.05, 2)
+                });
 
-   
+
+                Navigation.NavigateTo("/PurchaseConfirmation", true);
+
 
     // Display a success message or perform additional actions
                 Console.WriteLine("Product purchased successfully!");
@@ -209,7 +209,7 @@
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
-    
+
     private void NavigateToLogin()
     {
         Navigation.NavigateTo("/Login");

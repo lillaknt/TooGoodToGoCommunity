@@ -1,8 +1,9 @@
 using Application.Logic;
 using Domain.DTOs;
 using Domain.Models;
-namespace TestProject1;
 using NUnit.Framework;
+
+namespace TestProject1;
 
 public class UnitTestUser
 {
@@ -10,13 +11,13 @@ public class UnitTestUser
     public void UserTest()
     {
         // Arrange
-        int id = 1;
-        string email = "user@example.com";
-        string firstName = "John";
-        string password = "password";
-        int postCode = 12345;
-        int itemsPurchased = 2;
-        double co2Saved = .45;
+        var id = 1;
+        var email = "user@example.com";
+        var firstName = "John";
+        var password = "password";
+        var postCode = 12345;
+        var itemsPurchased = 2;
+        var co2Saved = .45;
 
         // Act
         var user = new User(id, email, firstName, password, postCode, itemsPurchased, co2Saved);
@@ -30,8 +31,8 @@ public class UnitTestUser
         Assert.That(user.ItemsPurchased, Is.EqualTo(itemsPurchased));
         Assert.That(user.CO2Saved, Is.EqualTo(co2Saved));
     }
-    
-        [TestFixture]
+
+    [TestFixture]
     public class UserLogicTests
     {
         [Test]
@@ -39,13 +40,13 @@ public class UnitTestUser
         {
             // Arrange
             var userToCreate = new UserCreationDto(
-                "test@example.com", 
-                "John", 
-                "password", 
+                "test@example.com",
+                "John",
+                "password",
                 12345,
                 2,
-                    .45
-                );
+                .45
+            );
 
             // Act and Assert
             Assert.DoesNotThrow(() => UserLogic.ValidateData(userToCreate));
@@ -61,7 +62,7 @@ public class UnitTestUser
                 "password",
                 12345,
                 2,
-                    .52
+                .52
             );
 
             // Act and Assert
@@ -79,7 +80,7 @@ public class UnitTestUser
                 "password",
                 12345,
                 4,
-                    .05
+                .05
             );
 
             // Act and Assert
@@ -97,12 +98,13 @@ public class UnitTestUser
                 "password",
                 12345,
                 1,
-                    .50
+                .50
             );
 
             // Act and Assert
             var exception = Assert.Throws<Exception>(() => UserLogic.ValidateData(userToCreate));
-            Assert.That(exception?.Message, Is.EqualTo("Invalid email format. Please include '@' in the email address!"));
+            Assert.That(exception?.Message,
+                Is.EqualTo("Invalid email format. Please include '@' in the email address!"));
         }
     }
 }

@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Exceptions;
@@ -63,8 +60,8 @@ public class UserController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError, new { ex.Message });
         }
     }
-    
-    
+
+
     [HttpPatch]
     public async Task<ActionResult> UpdateUserAsync(UserUpdateDto dto)
     {

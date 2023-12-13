@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Models;
@@ -20,9 +16,11 @@ public class PostFileDao : IPostDao
 
     public Task<Post> CreateAsync(Post post)
     {
+        // Generate a unique ID for the new post
         var postId = 1;
         if (context.Posts.Any())
         {
+            // Add the new post to the context and save changes
             postId = context.Posts.Max(p => p.Id);
             postId++;
         }
@@ -38,11 +36,15 @@ public class PostFileDao : IPostDao
 
     public Task<IEnumerable<Post>> GetAllPostsAsync()
     {
+        // Retrieve all posts from the context
+
         return Task.FromResult(context.Posts.AsEnumerable());
     }
 
     public Task<IEnumerable<Post>> GetAsync(SearchPostParametersDto searchParameters)
     {
+        // Filter posts based on search parameters
+
         var posts = context.Posts.AsEnumerable();
 
         if (searchParameters.Id.HasValue) posts = posts.Where(p => p.Id == searchParameters.Id.Value);
@@ -62,15 +64,20 @@ public class PostFileDao : IPostDao
 
     public Task<Post?> GetPostByIdAsync(int postId)
     {
+        // Retrieve a post by its ID from the context
+
         var post = context.Posts.FirstOrDefault(p => p.Id == postId);
         return Task.FromResult(post);
     }
 
     public Task UpdateAsync(Post updateDto)
     {
+        // Retrieve the existing post by ID
+
         var existingPost = context.Posts.FirstOrDefault(p => p.Id == updateDto.Id);
 
         if (existingPost == null) throw new KeyNotFoundException($"Post with ID {updateDto.Id} not found.");
+        // Remove the existing post and add the updated post
 
         context.Posts.Remove(existingPost);
         context.Posts.Add(updateDto);
@@ -85,6 +92,9 @@ public class PostFileDao : IPostDao
     {
         var existingPost = context.Posts.FirstOrDefault(p => p.Id == id);
         if (existingPost == null) throw new KeyNotFoundException($"Post with ID {id} not found.");
+
+
+        // Remove the existing post and save changes to the context
 
         context.Posts.Remove(existingPost);
         context.SaveChanges();

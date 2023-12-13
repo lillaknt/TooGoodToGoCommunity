@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 using Domain.Models;
+
 namespace FileData;
+
 /// Class for accessing data stored in a JSON file
 public class FileContext
 {
@@ -18,6 +18,7 @@ public class FileContext
             return dataContainer!.Users;
         }
     }
+
     /// Gets the collection of posts stored in the data file
     public ICollection<Post> Posts
     {
@@ -51,6 +52,7 @@ public class FileContext
 
         if (dataContainer.Posts == null) dataContainer.Posts = new List<Post>();
     }
+
     /// Saves changes made to the data container back to the JSON file
     public void SaveChanges()
     {

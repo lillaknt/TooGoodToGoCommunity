@@ -1,8 +1,8 @@
 @page "/UserProfile"
 @using System.Security.Claims
-@using Domain.DTOs
 @using Domain.Models
 @using HttpClients.ClientInterfaces
+@using Domain.DTOs
 @inject IUserService UserService
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -17,7 +17,7 @@
 </div>
 
 <div class="container">
-   
+
     <AuthorizeView>
         <Authorized>
             @if (user != null)
@@ -32,13 +32,13 @@
             }
 
             <div class="button-container">
-                
-                
+
+
                 <button class="button-primary" @onclick="ToggleEdit">Edit Profile</button>
-                 <button class="button-primary" @onclick="() => NavigateToImpact()">My Impact</button>
+                <button class="button-primary" @onclick="() => NavigateToImpact()">My Impact</button>
                 <button class="button-primary" @onclick="() => Logout()">Logout</button>
             </div>
-            
+
 
             <!-- Display input fields based on the value of isEditing -->
             @if (isEditing)
@@ -70,12 +70,12 @@
     private User user;
     private string email; // Declare email as a field
     private PostUpdateDto dto = null!;
-    private bool isEditing = false;
+    private bool isEditing;
     private string firstName = "";
-    private int postCode = 0;
+    private int postCode;
     private string resultMsg = "";
     private string color = "";
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,7 +113,7 @@
             resultMsg = "User successfully updated";
             color = "green";
             ResetForm();
-            Navigation.NavigateTo("/UserProfile", forceLoad: true);
+            Navigation.NavigateTo("/UserProfile", true);
         }
         catch (Exception e)
         {
@@ -128,22 +128,23 @@
         firstName = "";
         postCode = 0;
     }
-    
-    
+
+
     private void NavigateToLogin()
     {
         Navigation.NavigateTo("/Login");
     }
-    
+
     private async Task Logout()
     {
         await authService.LogoutAsync();
         Navigation.NavigateTo("/");
     }
-    
-    
+
+
     private void NavigateToImpact()
     {
         Navigation.NavigateTo("/PersonalImpact");
     }
+
 }

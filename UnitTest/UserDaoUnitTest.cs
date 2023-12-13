@@ -1,6 +1,7 @@
-namespace TestProject1;
-using System.Threading.Tasks;
+using Domain.Models;
 using NUnit.Framework;
+
+namespace TestProject1;
 
 public class UserDaoUnitTest
 {
@@ -14,7 +15,7 @@ public class UserDaoUnitTest
             var userDao = new InMemoryUserDao();
 
             // Act
-            var userToCreate = new Domain.Models.User
+            var userToCreate = new User
             {
                 Email = "test@example.com",
                 Password = "password",

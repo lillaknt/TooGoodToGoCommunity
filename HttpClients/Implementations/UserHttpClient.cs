@@ -6,6 +6,7 @@ using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
 
+/// Implementation of the HTTP client for interacting with the User service.
 public class UserHttpClient : IUserService
 {
     private readonly HttpClient client;
@@ -17,36 +18,34 @@ public class UserHttpClient : IUserService
 
     public async Task<User> CreateAsync(UserCreationDto dto)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/user", dto);
-        string result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(result);
-        }
+        // Send a POST request to create a new user
 
-        User user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
+        var response = await client.PostAsJsonAsync("/user", dto);
+        var result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
+        // Deserialize the JSON content to a User object
+
+        var user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
         return user;
     }
-    
+
     public async Task<IEnumerable<User>> GetAsync(string? emailContains = null)
     {
-        string uri = "/user";
-        if (!string.IsNullOrEmpty(emailContains))
-        {
-            uri += $"?email={emailContains}";
-        }
+        // Construct the URI based on the optional emailContains parameter
 
-        HttpResponseMessage response = await client.GetAsync(uri);
-        string result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(result);
-        }
+        var uri = "/user";
+        if (!string.IsNullOrEmpty(emailContains)) uri += $"?email={emailContains}";
+        // Send a GET request to retrieve users based on specified parameters
 
-        IEnumerable<User> users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
+        var response = await client.GetAsync(uri);
+        var result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
+        // Deserialize the JSON content to a collection of User objects
+
+        var users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
@@ -55,13 +54,14 @@ public class UserHttpClient : IUserService
 
     public async Task UpdateUserAsync(UserUpdateDto dto)
     {
-        HttpResponseMessage response = await client.PatchAsJsonAsync("/user", dto);
-    
+        // Send a PATCH request to update an existing user
+
+        var response = await client.PatchAsJsonAsync("/user", dto);
+
         if (!response.IsSuccessStatusCode)
         {
-            string result = await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadAsStringAsync();
             throw new Exception(result);
         }
     }
-
-    }
+}

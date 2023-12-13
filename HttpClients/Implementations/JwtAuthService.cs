@@ -7,25 +7,31 @@ using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
 
+/// Implementation of the authentication service using JWT.
 public class JwtAuthService : IAuthService
 {
     private readonly HttpClient client = new();
 
-    // this static field holds token received from the WebAPI
+    // Static field to hold the JWT token received from the WebAPI
     public static string? Jwt { get; private set; } = "";
+    // Action to notify when the authentication state changes
 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;
 
     public async Task LoginAsync(string email, string password)
     {
+        // Create a UserLoginDto from the provided email and password
+
         UserLoginDto userLoginDto = new()
         {
             Email = email,
             Password = password
         };
+        // Serialize the UserLoginDto to JSON
 
         var userAsJson = JsonSerializer.Serialize(userLoginDto);
         StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
+        // Send a POST request to the authentication endpoint
 
         var response = await client.PostAsync("https://localhost:7092/auth/login", content);
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -36,12 +42,15 @@ public class JwtAuthService : IAuthService
         Jwt = token;
 
         var principal = CreateClaimsPrincipal();
+        // Invoke the authentication state change callback
 
         OnAuthStateChanged.Invoke(principal);
     }
 
     public Task LogoutAsync()
     {
+        // Clear the JWT token and create an empty ClaimsPrincipal
+
         Jwt = null;
         ClaimsPrincipal principal = new();
         OnAuthStateChanged.Invoke(principal);
@@ -50,8 +59,13 @@ public class JwtAuthService : IAuthService
 
     public async Task RegisterAsync(User user)
     {
+        // Serialize the User object to JSON
+
         var userAsJson = JsonSerializer.Serialize(user);
         StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
+
+        // Send a POST request to the registration endpoint
+
         var response = await client.PostAsync("https://localhost:7092/auth/register", content);
         var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -60,9 +74,13 @@ public class JwtAuthService : IAuthService
 
     public Task<ClaimsPrincipal> GetAuthAsync()
     {
+        // Create a ClaimsPrincipal based on the stored JWT token
+
         var principal = CreateClaimsPrincipal();
         return Task.FromResult(principal);
     }
+
+    // Helper method to create a ClaimsPrincipal from the stored JWT token
 
     private static ClaimsPrincipal CreateClaimsPrincipal()
     {
@@ -75,6 +93,7 @@ public class JwtAuthService : IAuthService
         ClaimsPrincipal principal = new(identity);
         return principal;
     }
+    // Helper method to parse claims from the JWT token
 
     private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
@@ -83,6 +102,7 @@ public class JwtAuthService : IAuthService
         var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
         return keyValuePairs!.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!));
     }
+    // Helper method to parse Base64 without padding
 
     private static byte[] ParseBase64WithoutPadding(string base64)
     {

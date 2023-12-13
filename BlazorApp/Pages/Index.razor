@@ -23,16 +23,17 @@
 
 
 @code {
-    
+
     private User user;
     private string email; // Declare email as a field
+
     protected override async Task OnInitializedAsync()
-    
-    
+
+
     {
     // Access the user's email from the authentication state
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        
+
         email = authenticationState.User.FindFirstValue(ClaimTypes.Email);
 
         try

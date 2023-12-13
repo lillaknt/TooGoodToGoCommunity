@@ -1,7 +1,6 @@
 @page "/EditPost/{id:int}"
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
-@using System.IO
 @inject IPostService postService
 @inject NavigationManager Navigation
 <PageTitle>Edit Post</PageTitle>
@@ -53,6 +52,7 @@
 
     [Parameter]
     public int Id { get; set; }
+
     public int UserId { get; set; }
     private PostUpdateDto dto = null!;
     private string msg = "";

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using Domain.Models;
 
 namespace FileData;
+
 /// Represents the container for user and post data
 public class DataContainer
 {
